@@ -39,7 +39,6 @@ const studentItems = [
   { title: "Flashcards", url: "/flashcards", icon: Flame },
   { title: "Ma classe", url: "/my-class", icon: Users },
   { title: "Classement", url: "/classement", icon: Crown },
-  { title: "Classement", url: "/classement", icon: Crown },
   { title: "Profil", url: "/profil", icon: UserCircle },
   { title: "Paramètres", url: "/settings", icon: Settings },
 ];
