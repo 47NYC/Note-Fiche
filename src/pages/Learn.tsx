@@ -81,8 +81,8 @@ const Learn = () => {
             <Button variant="ghost" size="icon" onClick={() => setView({ type: "grid" })}>
               <ArrowLeft className="w-5 h-5" />
             </Button>
-            <div className={`w-10 h-10 rounded-xl flex items-center justify-center ${subjectInfo?.color}`}>
-              <Icon className="w-5 h-5" />
+            <div className={cn("w-10 h-10 rounded-xl flex items-center justify-center text-white", subjectColor)}>
+              <BookOpen className="w-5 h-5" />
             </div>
             <h1 className="text-2xl font-heading font-bold">{view.name}</h1>
             <span className="text-muted-foreground text-sm">({subjectDocs.length} fiches)</span>
