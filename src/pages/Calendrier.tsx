@@ -343,12 +343,12 @@ const CalendrierPage = () => {
                 {evaluations && evaluations.length > 0 && (
                   <div className="mt-4 space-y-2">
                     <p className="text-xs font-medium text-muted-foreground uppercase tracking-wider">Par matière</p>
-                    {SUBJECTS.filter((s) => evaluations.some((e) => e.subject === s.value)).map((s) => {
-                      const count = evaluations.filter((e) => e.subject === s.value).length;
+                    {subjects.filter((s) => evaluations.some((e) => e.subject === s.name)).map((s) => {
+                      const count = evaluations.filter((e) => e.subject === s.name).length;
                       return (
-                        <div key={s.value} className="flex items-center gap-2">
+                        <div key={s.name} className="flex items-center gap-2">
                           <span className={cn("w-2.5 h-2.5 rounded-full", s.color)} />
-                          <span className="text-sm flex-1">{s.value}</span>
+                          <span className="text-sm flex-1">{s.name}</span>
                           <span className="text-sm font-medium">{count}</span>
                         </div>
                       );
