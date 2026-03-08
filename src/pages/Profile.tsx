@@ -7,7 +7,7 @@ import { StreakWidget } from "@/components/profile/StreakWidget";
 import { AchievementGrid } from "@/components/profile/AchievementGrid";
 import { GoalManager } from "@/components/profile/GoalManager";
 import { Card, CardContent } from "@/components/ui/card";
-import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
 
@@ -52,6 +52,9 @@ const ProfilePage = () => {
           <CardContent className="p-6">
             <div className="flex items-center gap-4">
               <Avatar className="w-16 h-16">
+                {profile?.avatar_url && (
+                  <AvatarImage src={`${import.meta.env.VITE_SUPABASE_URL}/storage/v1/object/public/avatars/${profile.avatar_url}`} />
+                )}
                 <AvatarFallback className="gradient-primary text-primary-foreground text-xl font-bold">
                   {initials}
                 </AvatarFallback>
