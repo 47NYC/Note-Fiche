@@ -9,6 +9,7 @@ import Dashboard from "./pages/Dashboard";
 import JoinClass from "./pages/JoinClass";
 import BrevetBlanc from "./pages/BrevetBlanc";
 import AITutor from "./pages/AITutor";
+import CalendrierPage from "./pages/Calendrier";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
