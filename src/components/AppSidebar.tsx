@@ -41,6 +41,7 @@ const studentItems = [
   { title: "Badges", url: "/badges", icon: Trophy },
   { title: "Classement", url: "/classement", icon: Crown },
   { title: "Profil", url: "/profil", icon: UserCircle },
+  { title: "Paramètres", url: "/settings", icon: Settings },
 ];
 
 const teacherItems = [
