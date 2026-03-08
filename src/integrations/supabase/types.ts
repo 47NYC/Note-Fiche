@@ -14,6 +14,27 @@ export type Database = {
   }
   public: {
     Tables: {
+      achievements: {
+        Row: {
+          id: string
+          key: string
+          unlocked_at: string
+          user_id: string
+        }
+        Insert: {
+          id?: string
+          key: string
+          unlocked_at?: string
+          user_id: string
+        }
+        Update: {
+          id?: string
+          key?: string
+          unlocked_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       class_members: {
         Row: {
           class_id: string
@@ -141,6 +162,39 @@ export type Database = {
         }
         Relationships: []
       }
+      goals: {
+        Row: {
+          created_at: string
+          current_progress: number
+          daily_target_cards: number
+          id: string
+          skill: string
+          subject: string
+          user_id: string
+          weekly_target_minutes: number
+        }
+        Insert: {
+          created_at?: string
+          current_progress?: number
+          daily_target_cards?: number
+          id?: string
+          skill?: string
+          subject: string
+          user_id: string
+          weekly_target_minutes?: number
+        }
+        Update: {
+          created_at?: string
+          current_progress?: number
+          daily_target_cards?: number
+          id?: string
+          skill?: string
+          subject?: string
+          user_id?: string
+          weekly_target_minutes?: number
+        }
+        Relationships: []
+      }
       practice_sessions: {
         Row: {
           cards_reviewed: number
@@ -226,6 +280,42 @@ export type Database = {
           id?: string
           last_active_date?: string | null
           longest_streak?: number
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      user_preferences: {
+        Row: {
+          difficulty: string
+          id: string
+          notifications_enabled: boolean
+          preferred_exercise_types: string[] | null
+          study_end_hour: number
+          study_start_hour: number
+          timezone: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          difficulty?: string
+          id?: string
+          notifications_enabled?: boolean
+          preferred_exercise_types?: string[] | null
+          study_end_hour?: number
+          study_start_hour?: number
+          timezone?: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          difficulty?: string
+          id?: string
+          notifications_enabled?: boolean
+          preferred_exercise_types?: string[] | null
+          study_end_hour?: number
+          study_start_hour?: number
+          timezone?: string
           updated_at?: string
           user_id?: string
         }

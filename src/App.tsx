@@ -10,6 +10,7 @@ import JoinClass from "./pages/JoinClass";
 import BrevetBlanc from "./pages/BrevetBlanc";
 import AITutor from "./pages/AITutor";
 import CalendrierPage from "./pages/Calendrier";
+import ProfilePage from "./pages/Profile";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -35,6 +36,7 @@ const App = () => (
             <Route path="/learn" element={<Dashboard />} />
             <Route path="/flashcards" element={<Dashboard />} />
             <Route path="/badges" element={<Dashboard />} />
+            <Route path="/profil" element={<ProfilePage />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </BrowserRouter>
