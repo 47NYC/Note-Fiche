@@ -54,6 +54,7 @@ const teacherItems = [
   { title: "Documents", url: "/teacher-docs", icon: FileText },
   { title: "Élèves", url: "/teacher-students", icon: Users },
   { title: "Profil", url: "/profil", icon: UserCircle },
+  { title: "Paramètres", url: "/settings", icon: Settings },
 ];
 
 export function AppSidebar() {

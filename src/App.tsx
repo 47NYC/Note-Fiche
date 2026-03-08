@@ -46,6 +46,7 @@ const App = () => (
             <Route path="/badges" element={<Badges />} />
             <Route path="/classement" element={<Leaderboard />} />
             <Route path="/profil" element={<ProfilePage />} />
+            <Route path="/settings" element={<SettingsPage />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </BrowserRouter>

@@ -6,7 +6,6 @@ import { supabase } from "@/integrations/supabase/client";
 import { StreakWidget } from "@/components/profile/StreakWidget";
 import { AchievementGrid } from "@/components/profile/AchievementGrid";
 import { GoalManager } from "@/components/profile/GoalManager";
-import { PreferencesForm } from "@/components/profile/PreferencesForm";
 import { Card, CardContent } from "@/components/ui/card";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
