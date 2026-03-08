@@ -31,6 +31,7 @@ const App = () => (
             <Route path="/teacher-docs" element={<Dashboard />} />
             <Route path="/teacher-students" element={<Dashboard />} />
             <Route path="/ai-tutor" element={<AITutor />} />
+            <Route path="/calendrier" element={<CalendrierPage />} />
             <Route path="/learn" element={<Dashboard />} />
             <Route path="/flashcards" element={<Dashboard />} />
             <Route path="/badges" element={<Dashboard />} />
