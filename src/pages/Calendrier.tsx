@@ -281,7 +281,6 @@ const CalendrierPage = () => {
                             </Button>
                           </div>
                         )}
-                        </div>
                       </div>
                     ))}
                   </div>
