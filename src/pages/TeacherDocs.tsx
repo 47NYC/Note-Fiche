@@ -147,6 +147,36 @@ const TeacherDocs = () => {
     toast({ title: "Document supprimé" });
   };
 
+  const handleAddSubject = async () => {
+    if (!newSubjectName.trim() || !classData) return;
+    try {
+      await addSubject.mutateAsync({
+        name: newSubjectName.trim(),
+        color: SUBJECT_COLORS[subjects.length % SUBJECT_COLORS.length],
+        classId: classData.id,
+      });
+      setNewSubjectName("");
+      toast({ title: "Matière ajoutée !" });
+    } catch {
+      toast({ title: "Erreur", description: "Cette matière existe peut-être déjà", variant: "destructive" });
+    }
+  };
+
+  const handleRemoveSubject = async (subjectId: string, subjectName: string) => {
+    // Check if any documents use this subject
+    const hasDoc = documents.some((d) => d.folder === subjectName);
+    if (hasDoc) {
+      toast({ title: "Impossible", description: "Cette matière contient des documents. Supprimez-les d'abord.", variant: "destructive" });
+      return;
+    }
+    try {
+      await removeSubject.mutateAsync(subjectId);
+      toast({ title: "Matière supprimée" });
+    } catch {
+      toast({ title: "Erreur", description: "Impossible de supprimer la matière", variant: "destructive" });
+    }
+  };
+
   return (
     <DashboardLayout>
       <div className="space-y-6 max-w-4xl">
