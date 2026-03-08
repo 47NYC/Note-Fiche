@@ -202,6 +202,15 @@ const CalendrierPage = () => {
                   <Label>Description (optionnel)</Label>
                   <Textarea value={description} onChange={(e) => setDescription(e.target.value)} placeholder="Notes, chapitres à réviser..." rows={3} />
                 </div>
+                {role === "teacher" && classId && !editingEval && (
+                  <div className="flex items-center justify-between p-3 rounded-lg bg-muted/50">
+                    <div>
+                      <p className="text-sm font-medium">Partager avec la classe</p>
+                      <p className="text-xs text-muted-foreground">Visible par tous vos élèves</p>
+                    </div>
+                    <Switch checked={shareWithClass} onCheckedChange={setShareWithClass} />
+                  </div>
+                )}
                 <Button onClick={handleSubmit} className="w-full" disabled={addEvaluation.isPending || updateEvaluation.isPending}>
                   {editingEval ? "Enregistrer" : "Ajouter l'évaluation"}
                 </Button>
