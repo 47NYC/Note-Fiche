@@ -108,6 +108,39 @@ export type Database = {
           },
         ]
       }
+      evaluations: {
+        Row: {
+          color: string | null
+          created_at: string
+          description: string | null
+          eval_date: string
+          id: string
+          subject: string
+          title: string
+          user_id: string
+        }
+        Insert: {
+          color?: string | null
+          created_at?: string
+          description?: string | null
+          eval_date: string
+          id?: string
+          subject?: string
+          title: string
+          user_id: string
+        }
+        Update: {
+          color?: string | null
+          created_at?: string
+          description?: string | null
+          eval_date?: string
+          id?: string
+          subject?: string
+          title?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       practice_sessions: {
         Row: {
           cards_reviewed: number

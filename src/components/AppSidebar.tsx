@@ -9,6 +9,7 @@ import {
   LogOut,
   Flame,
   GraduationCap,
+  CalendarDays,
 } from "lucide-react";
 import { NavLink } from "@/components/NavLink";
 import { useLocation } from "react-router-dom";
@@ -30,6 +31,7 @@ import { Button } from "@/components/ui/button";
 const studentItems = [
   { title: "Dashboard", url: "/dashboard", icon: LayoutDashboard },
   { title: "Tuteur IA", url: "/ai-tutor", icon: Brain },
+  { title: "Calendrier", url: "/calendrier", icon: CalendarDays },
   { title: "Brevet Blanc", url: "/brevet-blanc", icon: GraduationCap },
   { title: "Apprendre", url: "/learn", icon: BookOpen },
   { title: "Flashcards", url: "/flashcards", icon: Flame },
