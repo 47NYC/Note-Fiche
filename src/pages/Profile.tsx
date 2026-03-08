@@ -52,6 +52,9 @@ const ProfilePage = () => {
           <CardContent className="p-6">
             <div className="flex items-center gap-4">
               <Avatar className="w-16 h-16">
+                {profile?.avatar_url && (
+                  <AvatarImage src={`${import.meta.env.VITE_SUPABASE_URL}/storage/v1/object/public/avatars/${profile.avatar_url}`} />
+                )}
                 <AvatarFallback className="gradient-primary text-primary-foreground text-xl font-bold">
                   {initials}
                 </AvatarFallback>
