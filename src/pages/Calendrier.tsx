@@ -156,11 +156,11 @@ const CalendrierPage = () => {
                   <Select value={subject} onValueChange={setSubject}>
                     <SelectTrigger><SelectValue placeholder="Choisis une matière" /></SelectTrigger>
                     <SelectContent>
-                      {SUBJECTS.map((s) => (
-                        <SelectItem key={s.value} value={s.value}>
+                      {subjects.map((s) => (
+                        <SelectItem key={s.name} value={s.name}>
                           <span className="flex items-center gap-2">
                             <span className={cn("w-2.5 h-2.5 rounded-full", s.color)} />
-                            {s.value}
+                            {s.name}
                           </span>
                         </SelectItem>
                       ))}
