@@ -249,7 +249,7 @@ const CalendrierPage = () => {
                   <div className="space-y-2">
                     {selectedEvals.map((ev) => (
                       <div key={ev.id} className="flex items-start gap-3 p-3 rounded-lg bg-muted/50 group">
-                        <span className={cn("w-3 h-3 rounded-full mt-1 shrink-0", getSubjectColor(ev.subject))} />
+                        <span className={cn("w-3 h-3 rounded-full mt-1 shrink-0", getColor(ev.subject))} />
                         <div className="flex-1 min-w-0">
                           <p className="font-medium text-sm">
                             {ev.title}
