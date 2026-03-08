@@ -43,7 +43,7 @@ const Learn = () => {
     setCounts(c);
   };
 
-  const filtered = SUBJECTS.filter((s) =>
+  const filtered = subjects.filter((s) =>
     s.name.toLowerCase().includes(search.toLowerCase())
   );
 
