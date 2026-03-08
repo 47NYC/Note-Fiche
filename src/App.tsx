@@ -17,6 +17,7 @@ import TeacherStudents from "./pages/TeacherStudents";
 import Learn from "./pages/Learn";
 import Flashcards from "./pages/Flashcards";
 import Badges from "./pages/Badges";
+import Leaderboard from "./pages/Leaderboard";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -42,6 +43,7 @@ const App = () => (
             <Route path="/learn" element={<Learn />} />
             <Route path="/flashcards" element={<Flashcards />} />
             <Route path="/badges" element={<Badges />} />
+            <Route path="/classement" element={<Leaderboard />} />
             <Route path="/profil" element={<ProfilePage />} />
             <Route path="*" element={<NotFound />} />
           </Routes>

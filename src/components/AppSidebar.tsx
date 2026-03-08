@@ -3,6 +3,7 @@ import {
   BookOpen,
   Brain,
   Trophy,
+  Crown,
   Users,
   FileText,
   Settings,
@@ -38,6 +39,7 @@ const studentItems = [
   { title: "Flashcards", url: "/flashcards", icon: Flame },
   { title: "Ma classe", url: "/my-class", icon: Users },
   { title: "Badges", url: "/badges", icon: Trophy },
+  { title: "Classement", url: "/classement", icon: Crown },
   { title: "Profil", url: "/profil", icon: UserCircle },
 ];
 
