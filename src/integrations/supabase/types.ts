@@ -470,6 +470,7 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      find_class_by_invite_code: { Args: { _code: string }; Returns: string }
       get_student_class_ids: { Args: { _user_id: string }; Returns: string[] }
       get_teacher_class_ids: { Args: { _user_id: string }; Returns: string[] }
       has_role: {
