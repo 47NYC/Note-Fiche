@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
@@ -7,6 +7,7 @@ import { Label } from "@/components/ui/label";
 import { Badge } from "@/components/ui/badge";
 import { Loader2, Sparkles, CheckCircle2, XCircle, RotateCcw } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
+import { useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 
 const SUBJECTS = ["Mathématiques", "Français", "Histoire-Géographie", "Physique-Chimie", "SVT", "Technologie"];
@@ -32,13 +33,15 @@ export function ExerciseGeneratorTab() {
   const [questions, setQuestions] = useState<Question[]>([]);
   const [answers, setAnswers] = useState<Record<number, number>>({});
   const [showResults, setShowResults] = useState(false);
-
+  const sessionSaved = useRef(false);
+  const queryClient = useQueryClient();
   const generate = async () => {
     if (!subject) { toast.error("Choisis une matière"); return; }
     setLoading(true);
     setQuestions([]);
     setAnswers({});
     setShowResults(false);
+    sessionSaved.current = false;
 
     try {
       const { data, error } = await supabase.functions.invoke("ai-generate-exercises", {
@@ -60,6 +63,39 @@ export function ExerciseGeneratorTab() {
   };
 
   const score = questions.reduce((acc, q, i) => acc + (answers[i] === q.correctIndex ? 1 : 0), 0);
+
+  const submitResults = async () => {
+    setShowResults(true);
+    if (sessionSaved.current) return;
+    sessionSaved.current = true;
+
+    const finalScore = questions.reduce((acc, q, i) => acc + (answers[i] === q.correctIndex ? 1 : 0), 0);
+    const scorePercent = Math.round((finalScore / questions.length) * 100);
+    const xp = finalScore * 10;
+
+    try {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) return;
+
+      await supabase.from("practice_sessions").insert({
+        user_id: user.id,
+        subject: subject,
+        cards_reviewed: questions.length,
+        correct_count: finalScore,
+        score: scorePercent,
+        points_earned: xp,
+        ended_at: new Date().toISOString(),
+      });
+
+      queryClient.invalidateQueries({ queryKey: ["student-stats"] });
+      queryClient.invalidateQueries({ queryKey: ["weekly-activity"] });
+      queryClient.invalidateQueries({ queryKey: ["recent-quizzes"] });
+      queryClient.invalidateQueries({ queryKey: ["subject-progress"] });
+      toast.success(`+${xp} XP gagnés !`);
+    } catch (e) {
+      console.error("Failed to save session:", e);
+    }
+  };
 
   return (
     <div className="space-y-6 p-4 overflow-y-auto max-h-[calc(100vh-220px)]">
@@ -155,7 +191,7 @@ export function ExerciseGeneratorTab() {
 
           <div className="flex gap-3">
             {!showResults ? (
-              <Button onClick={() => setShowResults(true)} disabled={Object.keys(answers).length < questions.length} className="flex-1">
+              <Button onClick={submitResults} disabled={Object.keys(answers).length < questions.length} className="flex-1">
                 Vérifier mes réponses
               </Button>
             ) : (
