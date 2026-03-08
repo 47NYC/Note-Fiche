@@ -262,17 +262,25 @@ const CalendrierPage = () => {
                       <div key={ev.id} className="flex items-start gap-3 p-3 rounded-lg bg-muted/50 group">
                         <span className={cn("w-3 h-3 rounded-full mt-1 shrink-0", getSubjectColor(ev.subject))} />
                         <div className="flex-1 min-w-0">
-                          <p className="font-medium text-sm">{ev.title}</p>
+                          <p className="font-medium text-sm">
+                            {ev.title}
+                            {ev.class_id && ev.user_id !== user?.id && (
+                              <Badge variant="secondary" className="ml-2 text-[10px]">Prof</Badge>
+                            )}
+                          </p>
                           <p className="text-xs text-muted-foreground">{ev.subject}</p>
                           {ev.description && <p className="text-xs text-muted-foreground mt-1">{ev.description}</p>}
                         </div>
-                        <div className="flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
-                          <Button variant="ghost" size="icon" className="h-7 w-7" onClick={() => openEdit(ev)}>
-                            <Edit2 className="w-3.5 h-3.5" />
-                          </Button>
-                          <Button variant="ghost" size="icon" className="h-7 w-7 text-destructive" onClick={() => handleDelete(ev.id)}>
-                            <Trash2 className="w-3.5 h-3.5" />
-                          </Button>
+                        {ev.user_id === user?.id && (
+                          <div className="flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                            <Button variant="ghost" size="icon" className="h-7 w-7" onClick={() => openEdit(ev)}>
+                              <Edit2 className="w-3.5 h-3.5" />
+                            </Button>
+                            <Button variant="ghost" size="icon" className="h-7 w-7 text-destructive" onClick={() => handleDelete(ev.id)}>
+                              <Trash2 className="w-3.5 h-3.5" />
+                            </Button>
+                          </div>
+                        )}
                         </div>
                       </div>
                     ))}
