@@ -2,28 +2,13 @@ import { DashboardLayout } from "@/components/DashboardLayout";
 import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import {
-  Search, BookOpen, Palette, Calculator, Globe, FlaskConical,
-  Music, Dumbbell, Monitor, Languages, MapPin, ArrowLeft, FileText, Brain,
-} from "lucide-react";
+import { Search, BookOpen, ArrowLeft, Brain } from "lucide-react";
 import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import StructuredDocViewer from "@/components/learn/StructuredDocViewer";
 import { Badge } from "@/components/ui/badge";
-
-const SUBJECTS = [
-  { name: "Mathématiques", icon: Calculator, color: "bg-green-100 text-green-600" },
-  { name: "Français", icon: BookOpen, color: "bg-blue-100 text-blue-600" },
-  { name: "Histoire-Géo EMC", icon: MapPin, color: "bg-yellow-100 text-yellow-600" },
-  { name: "Sciences (SVT)", icon: FlaskConical, color: "bg-emerald-100 text-emerald-600" },
-  { name: "Physique-Chimie", icon: FlaskConical, color: "bg-orange-100 text-orange-600" },
-  { name: "Anglais", icon: Languages, color: "bg-purple-100 text-purple-600" },
-  { name: "Espagnol", icon: Globe, color: "bg-red-100 text-red-600" },
-  { name: "Art Plastiques", icon: Palette, color: "bg-pink-100 text-pink-600" },
-  { name: "Musique", icon: Music, color: "bg-fuchsia-100 text-fuchsia-600" },
-  { name: "EPS", icon: Dumbbell, color: "bg-teal-100 text-teal-600" },
-  { name: "Technologie", icon: Monitor, color: "bg-sky-100 text-sky-600" },
-];
+import { useSubjects } from "@/hooks/useSubjects";
+import { cn } from "@/lib/utils";
 
 type ViewState =
   | { type: "grid" }
