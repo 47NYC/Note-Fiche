@@ -103,6 +103,8 @@ const CalendrierPage = () => {
           description,
           eval_date: format(evalDate, "yyyy-MM-dd"),
           color: "primary",
+          ...(shareWithClass && classId ? { class_id: classId } : {}),
+        } as any);
         });
         toast.success("Évaluation ajoutée");
       }
