@@ -36,6 +36,7 @@ const App = () => (
             <Route path="/learn" element={<Dashboard />} />
             <Route path="/flashcards" element={<Dashboard />} />
             <Route path="/badges" element={<Dashboard />} />
+            <Route path="/profil" element={<ProfilePage />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </BrowserRouter>
