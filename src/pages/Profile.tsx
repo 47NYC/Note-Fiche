@@ -81,11 +81,8 @@ const ProfilePage = () => {
           totalXP={stats?.totalXP ?? 0}
         />
 
-        {/* Goals + Preferences side by side */}
-        <div className="grid lg:grid-cols-2 gap-6">
-          <GoalManager />
-          <PreferencesForm />
-        </div>
+        {/* Goals */}
+        <GoalManager />
 
         {/* Achievements */}
         <AchievementGrid />
