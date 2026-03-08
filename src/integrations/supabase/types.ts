@@ -92,8 +92,9 @@ export type Database = {
         Row: {
           class_id: string
           created_at: string
-          file_path: string
+          file_path: string | null
           folder: string
+          google_doc_url: string | null
           id: string
           is_brevet_blanc: boolean
           teacher_id: string
@@ -102,8 +103,9 @@ export type Database = {
         Insert: {
           class_id: string
           created_at?: string
-          file_path: string
+          file_path?: string | null
           folder?: string
+          google_doc_url?: string | null
           id?: string
           is_brevet_blanc?: boolean
           teacher_id: string
@@ -112,8 +114,9 @@ export type Database = {
         Update: {
           class_id?: string
           created_at?: string
-          file_path?: string
+          file_path?: string | null
           folder?: string
+          google_doc_url?: string | null
           id?: string
           is_brevet_blanc?: boolean
           teacher_id?: string
@@ -161,6 +164,59 @@ export type Database = {
           user_id?: string
         }
         Relationships: []
+      }
+      flashcards: {
+        Row: {
+          back: string
+          card_type: string
+          created_at: string | null
+          ease_factor: number | null
+          front: string
+          id: string
+          interval_days: number | null
+          next_review: string | null
+          repetitions: number | null
+          structured_document_id: string | null
+          subject: string
+          user_id: string
+        }
+        Insert: {
+          back: string
+          card_type?: string
+          created_at?: string | null
+          ease_factor?: number | null
+          front: string
+          id?: string
+          interval_days?: number | null
+          next_review?: string | null
+          repetitions?: number | null
+          structured_document_id?: string | null
+          subject?: string
+          user_id: string
+        }
+        Update: {
+          back?: string
+          card_type?: string
+          created_at?: string | null
+          ease_factor?: number | null
+          front?: string
+          id?: string
+          interval_days?: number | null
+          next_review?: string | null
+          repetitions?: number | null
+          structured_document_id?: string | null
+          subject?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "flashcards_structured_document_id_fkey"
+            columns: ["structured_document_id"]
+            isOneToOne: false
+            referencedRelation: "structured_documents"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       goals: {
         Row: {
@@ -320,6 +376,41 @@ export type Database = {
           },
         ]
       }
+      student_doc_progress: {
+        Row: {
+          completed_chapters: number[] | null
+          id: string
+          qcm_scores: Json | null
+          structured_document_id: string
+          updated_at: string | null
+          user_id: string
+        }
+        Insert: {
+          completed_chapters?: number[] | null
+          id?: string
+          qcm_scores?: Json | null
+          structured_document_id: string
+          updated_at?: string | null
+          user_id: string
+        }
+        Update: {
+          completed_chapters?: number[] | null
+          id?: string
+          qcm_scores?: Json | null
+          structured_document_id?: string
+          updated_at?: string | null
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "student_doc_progress_structured_document_id_fkey"
+            columns: ["structured_document_id"]
+            isOneToOne: false
+            referencedRelation: "structured_documents"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       user_preferences: {
         Row: {
           difficulty: string
@@ -379,11 +470,21 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      get_student_class_ids: { Args: { _user_id: string }; Returns: string[] }
+      get_teacher_class_ids: { Args: { _user_id: string }; Returns: string[] }
       has_role: {
         Args: {
           _role: Database["public"]["Enums"]["app_role"]
           _user_id: string
         }
+        Returns: boolean
+      }
+      is_class_member: {
+        Args: { _class_id: string; _user_id: string }
+        Returns: boolean
+      }
+      is_class_teacher: {
+        Args: { _class_id: string; _user_id: string }
         Returns: boolean
       }
     }
