@@ -20,6 +20,7 @@ import {
 import { useSubjects } from "@/hooks/useSubjects";
 
 const BrevetBlanc = () => {
+  const { subjectNames } = useSubjects();
   const { user, role } = useAuth();
   const { toast } = useToast();
   const [documents, setDocuments] = useState<any[]>([]);
