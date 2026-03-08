@@ -158,7 +158,7 @@ const BrevetBlanc = () => {
                         <SelectValue placeholder="Choisir une matière" />
                       </SelectTrigger>
                       <SelectContent>
-                        {SUBJECTS.map((s) => (
+                        {subjectNames.map((s) => (
                           <SelectItem key={s} value={s}>{s}</SelectItem>
                         ))}
                       </SelectContent>

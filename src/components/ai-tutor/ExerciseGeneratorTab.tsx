@@ -115,7 +115,7 @@ export function ExerciseGeneratorTab() {
               <Select value={subject} onValueChange={setSubject}>
                 <SelectTrigger><SelectValue placeholder="Choisis une matière" /></SelectTrigger>
                 <SelectContent>
-                  {SUBJECTS.map((s) => <SelectItem key={s} value={s}>{s}</SelectItem>)}
+                  {subjectNames.map((s) => <SelectItem key={s} value={s}>{s}</SelectItem>)}
                 </SelectContent>
               </Select>
             </div>
