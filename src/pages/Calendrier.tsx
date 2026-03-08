@@ -37,9 +37,19 @@ const getSubjectColor = (subject: string) =>
 
 const CalendrierPage = () => {
   const { data: evaluations, isLoading, addEvaluation, updateEvaluation, deleteEvaluation } = useEvaluations();
+  const { user, role } = useAuth();
   const [selectedDate, setSelectedDate] = useState<Date>(new Date());
   const [dialogOpen, setDialogOpen] = useState(false);
   const [editingEval, setEditingEval] = useState<Evaluation | null>(null);
+  const [classId, setClassId] = useState<string | null>(null);
+  const [shareWithClass, setShareWithClass] = useState(false);
+
+  // Fetch teacher's class_id
+  useEffect(() => {
+    if (role !== "teacher" || !user) return;
+    supabase.from("classes").select("id").eq("teacher_id", user.id).maybeSingle()
+      .then(({ data }) => { if (data) setClassId(data.id); });
+  }, [role, user]);
 
   // Form state
   const [title, setTitle] = useState("");
@@ -53,6 +63,7 @@ const CalendrierPage = () => {
     setDescription("");
     setEvalDate(new Date());
     setEditingEval(null);
+    setShareWithClass(false);
   };
 
   const openCreate = (date?: Date) => {
