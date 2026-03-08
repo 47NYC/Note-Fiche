@@ -74,6 +74,7 @@ const Learn = () => {
             title={view.doc.title}
             subject={view.doc.subject}
             content={view.doc.content}
+            documentId={view.doc.id}
             onBack={() => setView({ type: "subject", name: view.doc.subject })}
           />
         </div>
