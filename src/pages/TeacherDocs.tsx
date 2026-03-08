@@ -7,8 +7,9 @@ import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useAuth } from "@/hooks/useAuth";
 import { supabase } from "@/integrations/supabase/client";
-import { Upload, FileText, Download, Trash2 } from "lucide-react";
+import { Upload, FileText, Download, Trash2, Brain, Loader2, CheckCircle } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+import { Badge } from "@/components/ui/badge";
 
 const SUBJECTS = [
   "Mathématiques", "Français", "Histoire-Géo EMC", "Sciences (SVT)",
@@ -21,7 +22,9 @@ const TeacherDocs = () => {
   const { toast } = useToast();
   const [classData, setClassData] = useState<any>(null);
   const [documents, setDocuments] = useState<any[]>([]);
+  const [processedIds, setProcessedIds] = useState<Set<string>>(new Set());
   const [uploading, setUploading] = useState(false);
+  const [processingId, setProcessingId] = useState<string | null>(null);
   const [docTitle, setDocTitle] = useState("");
   const [docSubject, setDocSubject] = useState("");
 
@@ -47,6 +50,16 @@ const TeacherDocs = () => {
         .eq("is_brevet_blanc", false)
         .order("created_at", { ascending: false });
       setDocuments(docs || []);
+
+      // Check which docs are already processed
+      const docIds = (docs || []).map((d: any) => d.id);
+      if (docIds.length > 0) {
+        const { data: structured } = await supabase
+          .from("structured_documents")
+          .select("document_id")
+          .in("document_id", docIds);
+        setProcessedIds(new Set((structured || []).map((s: any) => s.document_id)));
+      }
     }
   };
 
@@ -88,6 +101,35 @@ const TeacherDocs = () => {
     await loadData();
     setUploading(false);
     toast({ title: "Document ajouté !" });
+  };
+
+  const processDocument = async (docId: string) => {
+    setProcessingId(docId);
+    try {
+      const { data, error } = await supabase.functions.invoke("process-document", {
+        body: { document_id: docId },
+      });
+
+      if (error) {
+        toast({ title: "Erreur", description: "Échec du traitement IA", variant: "destructive" });
+        console.error("Process error:", error);
+      } else if (data?.error) {
+        toast({
+          title: data.existing_id ? "Déjà traité" : "Erreur",
+          description: data.error,
+          variant: data.existing_id ? "default" : "destructive",
+        });
+        if (data.existing_id) {
+          setProcessedIds((prev) => new Set([...prev, docId]));
+        }
+      } else {
+        toast({ title: "Document structuré avec succès !" });
+        setProcessedIds((prev) => new Set([...prev, docId]));
+      }
+    } catch (e) {
+      toast({ title: "Erreur", description: "Échec du traitement", variant: "destructive" });
+    }
+    setProcessingId(null);
   };
 
   const downloadDoc = async (filePath: string) => {
@@ -167,27 +209,66 @@ const TeacherDocs = () => {
               <p className="text-muted-foreground text-sm">Aucun document uploadé</p>
             ) : (
               <div className="space-y-2">
-                {documents.map((doc) => (
-                  <div
-                    key={doc.id}
-                    className="flex items-center gap-3 p-3 rounded-xl bg-secondary/50 group"
-                  >
-                    <FileText className="w-5 h-5 text-primary shrink-0" />
-                    <div className="flex-1 min-w-0">
-                      <p className="font-medium text-sm truncate">{doc.title}</p>
-                      <p className="text-xs text-muted-foreground">
-                        {doc.folder && <span className="mr-2">{doc.folder}</span>}
-                        {new Date(doc.created_at).toLocaleDateString("fr-FR")}
-                      </p>
+                {documents.map((doc) => {
+                  const isProcessed = processedIds.has(doc.id);
+                  const isProcessing = processingId === doc.id;
+
+                  return (
+                    <div
+                      key={doc.id}
+                      className="flex items-center gap-3 p-3 rounded-xl bg-secondary/50 group"
+                    >
+                      <FileText className="w-5 h-5 text-primary shrink-0" />
+                      <div className="flex-1 min-w-0">
+                        <div className="flex items-center gap-2">
+                          <p className="font-medium text-sm truncate">{doc.title}</p>
+                          {isProcessed && (
+                            <Badge variant="secondary" className="text-xs shrink-0">
+                              <CheckCircle className="w-3 h-3 mr-1" />
+                              Structuré
+                            </Badge>
+                          )}
+                        </div>
+                        <p className="text-xs text-muted-foreground">
+                          {doc.folder && <span className="mr-2">{doc.folder}</span>}
+                          {new Date(doc.created_at).toLocaleDateString("fr-FR")}
+                        </p>
+                      </div>
+                      {!isProcessed && (
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          className="shrink-0"
+                          disabled={isProcessing}
+                          onClick={() => processDocument(doc.id)}
+                        >
+                          {isProcessing ? (
+                            <Loader2 className="w-4 h-4 mr-1 animate-spin" />
+                          ) : (
+                            <Brain className="w-4 h-4 mr-1" />
+                          )}
+                          {isProcessing ? "Traitement..." : "Structurer IA"}
+                        </Button>
+                      )}
+                      <Button
+                        variant="ghost"
+                        size="icon"
+                        className="shrink-0"
+                        onClick={() => downloadDoc(doc.file_path)}
+                      >
+                        <Download className="w-4 h-4" />
+                      </Button>
+                      <Button
+                        variant="ghost"
+                        size="icon"
+                        className="shrink-0 text-destructive"
+                        onClick={() => deleteDoc(doc.id, doc.file_path)}
+                      >
+                        <Trash2 className="w-4 h-4" />
+                      </Button>
                     </div>
-                    <Button variant="ghost" size="icon" className="shrink-0" onClick={() => downloadDoc(doc.file_path)}>
-                      <Download className="w-4 h-4" />
-                    </Button>
-                    <Button variant="ghost" size="icon" className="shrink-0 text-destructive" onClick={() => deleteDoc(doc.id, doc.file_path)}>
-                      <Trash2 className="w-4 h-4" />
-                    </Button>
-                  </div>
-                ))}
+                  );
+                })}
               </div>
             )}
           </CardContent>
