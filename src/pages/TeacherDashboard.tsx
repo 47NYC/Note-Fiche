@@ -110,6 +110,26 @@ const TeacherDashboard = () => {
       <div className="space-y-6 max-w-4xl">
         <h1 className="text-3xl font-heading font-bold">Espace Enseignant</h1>
 
+        {/* Invite code banner */}
+        {classData && (
+          <Card className="glass-card border-primary/20 bg-primary/5">
+            <CardContent className="py-4 flex items-center justify-between flex-wrap gap-3">
+              <div>
+                <p className="text-sm text-muted-foreground">Code d'invitation de votre classe</p>
+                <p className="font-semibold text-lg">{classData.name}</p>
+              </div>
+              <div className="flex items-center gap-2">
+                <code className="px-5 py-2 rounded-xl bg-primary/10 text-primary font-mono text-xl font-bold tracking-widest">
+                  {classData.invite_code}
+                </code>
+                <Button variant="outline" size="icon" onClick={copyCode}>
+                  <Copy className="w-4 h-4" />
+                </Button>
+              </div>
+            </CardContent>
+          </Card>
+        )}
+
         {/* Class info */}
         <Card className="glass-card">
           <CardHeader>
