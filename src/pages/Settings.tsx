@@ -29,23 +29,17 @@ const SettingsPage = () => {
     setDeleting(true);
     try {
       // Delete user data from all tables
-      const tables = [
-        "user_preferences",
-        "achievements",
-        "goals",
-        "practice_sessions",
-        "flashcards",
-        "student_doc_progress",
-        "streaks",
-        "evaluations",
-        "class_members",
-        "profiles",
-        "user_roles",
-      ];
-
-      for (const table of tables) {
-        await supabase.from(table).delete().eq("user_id", user.id);
-      }
+      await supabase.from("user_preferences").delete().eq("user_id", user.id);
+      await supabase.from("achievements").delete().eq("user_id", user.id);
+      await supabase.from("goals").delete().eq("user_id", user.id);
+      await supabase.from("practice_sessions").delete().eq("user_id", user.id);
+      await supabase.from("flashcards").delete().eq("user_id", user.id);
+      await supabase.from("student_doc_progress").delete().eq("user_id", user.id);
+      await supabase.from("streaks").delete().eq("user_id", user.id);
+      await supabase.from("evaluations").delete().eq("user_id", user.id);
+      await supabase.from("class_members").delete().eq("student_id", user.id);
+      await supabase.from("profiles").delete().eq("user_id", user.id);
+      await supabase.from("user_roles").delete().eq("user_id", user.id);
 
       // Sign out (account deletion from auth requires admin/edge function)
       toast.success("Compte supprimé avec succès");
