@@ -7,6 +7,7 @@ import { AuthProvider } from "@/hooks/useAuth";
 import Auth from "./pages/Auth";
 import Dashboard from "./pages/Dashboard";
 import JoinClass from "./pages/JoinClass";
+import BrevetBlanc from "./pages/BrevetBlanc";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -23,6 +24,7 @@ const App = () => (
             <Route path="/auth" element={<Auth />} />
             <Route path="/dashboard" element={<Dashboard />} />
             <Route path="/my-class" element={<JoinClass />} />
+            <Route path="/brevet-blanc" element={<BrevetBlanc />} />
             <Route path="/teacher-class" element={<Dashboard />} />
             <Route path="/teacher-docs" element={<Dashboard />} />
             <Route path="/teacher-students" element={<Dashboard />} />

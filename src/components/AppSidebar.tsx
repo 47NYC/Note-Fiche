@@ -29,6 +29,7 @@ import { Button } from "@/components/ui/button";
 
 const studentItems = [
   { title: "Dashboard", url: "/dashboard", icon: LayoutDashboard },
+  { title: "Brevet Blanc", url: "/brevet-blanc", icon: GraduationCap },
   { title: "Apprendre", url: "/learn", icon: BookOpen },
   { title: "Flashcards", url: "/flashcards", icon: Brain },
   { title: "Ma classe", url: "/my-class", icon: Users },
@@ -37,6 +38,7 @@ const studentItems = [
 
 const teacherItems = [
   { title: "Dashboard", url: "/dashboard", icon: LayoutDashboard },
+  { title: "Brevet Blanc", url: "/brevet-blanc", icon: GraduationCap },
   { title: "Ma classe", url: "/teacher-class", icon: GraduationCap },
   { title: "Documents", url: "/teacher-docs", icon: FileText },
   { title: "Élèves", url: "/teacher-students", icon: Users },
