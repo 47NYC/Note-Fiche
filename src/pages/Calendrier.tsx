@@ -18,8 +18,7 @@ import { cn } from "@/lib/utils";
 import { useEvaluations, type Evaluation } from "@/hooks/useEvaluations";
 import { useAuth } from "@/hooks/useAuth";
 import { supabase } from "@/integrations/supabase/client";
-import { toast } from "sonner";
-import { Skeleton } from "@/components/ui/skeleton";
+import { useSubjects } from "@/hooks/useSubjects";
 
 const SUBJECTS = [
   { value: "Mathématiques", color: "bg-blue-500" },

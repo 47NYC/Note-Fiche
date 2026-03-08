@@ -17,8 +17,7 @@ import {
 import {
   Select, SelectContent, SelectItem, SelectTrigger, SelectValue,
 } from "@/components/ui/select";
-
-const SUBJECTS = ["Mathématiques", "Français", "Histoire-Géo", "Sciences", "Anglais", "Autre"];
+import { useSubjects } from "@/hooks/useSubjects";
 
 const BrevetBlanc = () => {
   const { user, role } = useAuth();

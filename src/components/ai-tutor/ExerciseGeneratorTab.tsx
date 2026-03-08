@@ -9,8 +9,7 @@ import { Loader2, Sparkles, CheckCircle2, XCircle, RotateCcw } from "lucide-reac
 import { supabase } from "@/integrations/supabase/client";
 import { useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
-
-const SUBJECTS = ["Mathématiques", "Français", "Histoire-Géographie", "Physique-Chimie", "SVT", "Technologie"];
+import { useSubjects } from "@/hooks/useSubjects";
 const DIFFICULTIES = [
   { value: "facile", label: "Facile" },
   { value: "moyen", label: "Moyen" },
