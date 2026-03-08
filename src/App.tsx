@@ -8,6 +8,7 @@ import Auth from "./pages/Auth";
 import Dashboard from "./pages/Dashboard";
 import JoinClass from "./pages/JoinClass";
 import BrevetBlanc from "./pages/BrevetBlanc";
+import AITutor from "./pages/AITutor";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -28,6 +29,7 @@ const App = () => (
             <Route path="/teacher-class" element={<Dashboard />} />
             <Route path="/teacher-docs" element={<Dashboard />} />
             <Route path="/teacher-students" element={<Dashboard />} />
+            <Route path="/ai-tutor" element={<AITutor />} />
             <Route path="/learn" element={<Dashboard />} />
             <Route path="/flashcards" element={<Dashboard />} />
             <Route path="/badges" element={<Dashboard />} />

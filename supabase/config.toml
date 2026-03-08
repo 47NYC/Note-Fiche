@@ -1,1 +1,10 @@
 project_id = "ccrzozlmkyvbelmivupr"
+
+[functions.ai-tutor-chat]
+verify_jwt = false
+
+[functions.ai-weak-points]
+verify_jwt = false
+
+[functions.ai-generate-exercises]
+verify_jwt = false
