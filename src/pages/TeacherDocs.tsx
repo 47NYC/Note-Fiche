@@ -235,7 +235,73 @@ const TeacherDocs = () => {
           </CardContent>
         </Card>
 
+        {/* Subject management */}
         <Card className="glass-card">
+          <CardHeader>
+            <CardTitle className="font-heading flex items-center justify-between">
+              <span>Matières ({subjects.length})</span>
+              <Dialog open={subjectDialogOpen} onOpenChange={setSubjectDialogOpen}>
+                <DialogTrigger asChild>
+                  <Button size="sm" variant="outline">
+                    <Plus className="w-4 h-4 mr-1" /> Ajouter
+                  </Button>
+                </DialogTrigger>
+                <DialogContent>
+                  <DialogHeader>
+                    <DialogTitle>Ajouter une matière</DialogTitle>
+                  </DialogHeader>
+                  <div className="space-y-4 mt-2">
+                    <div className="space-y-2">
+                      <Label>Nom de la matière</Label>
+                      <Input
+                        value={newSubjectName}
+                        onChange={(e) => setNewSubjectName(e.target.value)}
+                        placeholder="Ex: Latin, Allemand..."
+                        onKeyDown={(e) => { if (e.key === "Enter") handleAddSubject(); }}
+                      />
+                    </div>
+                    <Button onClick={() => { handleAddSubject(); setSubjectDialogOpen(false); }} className="w-full" disabled={!newSubjectName.trim()}>
+                      Ajouter la matière
+                    </Button>
+                  </div>
+                </DialogContent>
+              </Dialog>
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="flex flex-wrap gap-2">
+              {subjects.map((s) => {
+                const hasDoc = documents.some((d) => d.folder === s.name);
+                return (
+                  <div
+                    key={s.id}
+                    className={cn(
+                      "flex items-center gap-2 px-3 py-1.5 rounded-full text-sm border",
+                      hasDoc ? "bg-muted/50" : "bg-muted/30"
+                    )}
+                  >
+                    <span className={cn("w-2.5 h-2.5 rounded-full", s.color)} />
+                    <span>{s.name}</span>
+                    {hasDoc ? (
+                      <Badge variant="secondary" className="text-[10px] ml-1">docs</Badge>
+                    ) : (
+                      <button
+                        onClick={() => handleRemoveSubject(s.id, s.name)}
+                        className="ml-1 text-muted-foreground hover:text-destructive transition-colors"
+                      >
+                        <X className="w-3.5 h-3.5" />
+                      </button>
+                    )}
+                  </div>
+                );
+              })}
+            </div>
+            <p className="text-xs text-muted-foreground mt-3">
+              Les matières avec des documents ne peuvent pas être supprimées.
+            </p>
+          </CardContent>
+        </Card>
+
           <CardHeader>
             <CardTitle className="font-heading">
               Mes documents ({documents.length})
