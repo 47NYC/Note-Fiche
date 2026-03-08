@@ -302,6 +302,7 @@ const TeacherDocs = () => {
           </CardContent>
         </Card>
 
+        <Card className="glass-card">
           <CardHeader>
             <CardTitle className="font-heading">
               Mes documents ({documents.length})
