@@ -27,6 +27,7 @@ import {
 
 const SettingsPage = () => {
   const { user, signOut } = useAuth();
+  const { theme, setTheme } = useTheme();
   const queryClient = useQueryClient();
   const [deleting, setDeleting] = useState(false);
   const [fullName, setFullName] = useState("");
