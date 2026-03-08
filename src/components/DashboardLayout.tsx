@@ -1,8 +1,11 @@
 import { ReactNode } from "react";
 import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 import { AppSidebar } from "@/components/AppSidebar";
+import { useFlashcardReminder } from "@/hooks/useFlashcardReminder";
 
 export function DashboardLayout({ children }: { children: ReactNode }) {
+  useFlashcardReminder();
+
   return (
     <SidebarProvider>
       <div className="min-h-screen flex w-full">
