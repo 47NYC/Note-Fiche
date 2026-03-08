@@ -20,7 +20,6 @@ import Learn from "./pages/Learn";
 import Flashcards from "./pages/Flashcards";
 import Leaderboard from "./pages/Leaderboard";
 import NotFound from "./pages/NotFound";
-import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
 
