@@ -179,8 +179,8 @@ const Learn = () => {
                 onClick={() => setView({ type: "subject", name: subject.name })}
               >
                 <CardContent className="p-4 flex items-center gap-3">
-                  <div className={`w-11 h-11 rounded-xl flex items-center justify-center shrink-0 ${subject.color}`}>
-                    <subject.icon className="w-5 h-5" />
+                  <div className={cn("w-11 h-11 rounded-xl flex items-center justify-center shrink-0 text-white", subject.color)}>
+                    <BookOpen className="w-5 h-5" />
                   </div>
                   <div className="min-w-0 flex-1">
                     <p className="font-medium text-sm truncate">{subject.name}</p>
