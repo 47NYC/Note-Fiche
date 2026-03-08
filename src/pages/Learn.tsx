@@ -70,8 +70,8 @@ const Learn = () => {
 
   // View: subject fiches list
   if (view.type === "subject") {
-    const subjectInfo = SUBJECTS.find((s) => s.name === view.name);
-    const Icon = subjectInfo?.icon || BookOpen;
+    const subjectInfo = subjects.find((s) => s.name === view.name);
+    const subjectColor = subjectInfo?.color ?? "bg-primary";
     const subjectDocs = structuredDocs.filter((d) => d.subject === view.name);
 
     return (
