@@ -14,9 +14,16 @@ import { useSubjects } from "@/hooks/useSubjects";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { cn } from "@/lib/utils";
 
+const SUBJECT_COLORS = [
+  "bg-blue-500", "bg-rose-500", "bg-amber-500", "bg-green-500", "bg-emerald-500",
+  "bg-cyan-500", "bg-red-500", "bg-pink-500", "bg-fuchsia-500", "bg-teal-500", "bg-purple-500",
+  "bg-orange-500", "bg-indigo-500", "bg-lime-500", "bg-sky-500",
+];
+
 const TeacherDocs = () => {
   const { user } = useAuth();
   const { toast } = useToast();
+  const { subjects, subjectNames, addSubject, removeSubject } = useSubjects();
   const [classData, setClassData] = useState<any>(null);
   const [documents, setDocuments] = useState<any[]>([]);
   const [processedIds, setProcessedIds] = useState<Set<string>>(new Set());
@@ -25,6 +32,8 @@ const TeacherDocs = () => {
   const [docTitle, setDocTitle] = useState("");
   const [docSubject, setDocSubject] = useState("");
   const [googleDocUrl, setGoogleDocUrl] = useState("");
+  const [newSubjectName, setNewSubjectName] = useState("");
+  const [subjectDialogOpen, setSubjectDialogOpen] = useState(false);
 
   useEffect(() => {
     if (!user) return;
