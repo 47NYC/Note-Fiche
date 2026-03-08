@@ -11,6 +11,12 @@ import BrevetBlanc from "./pages/BrevetBlanc";
 import AITutor from "./pages/AITutor";
 import CalendrierPage from "./pages/Calendrier";
 import ProfilePage from "./pages/Profile";
+import TeacherClass from "./pages/TeacherClass";
+import TeacherDocs from "./pages/TeacherDocs";
+import TeacherStudents from "./pages/TeacherStudents";
+import Learn from "./pages/Learn";
+import Flashcards from "./pages/Flashcards";
+import Badges from "./pages/Badges";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -28,14 +34,14 @@ const App = () => (
             <Route path="/dashboard" element={<Dashboard />} />
             <Route path="/my-class" element={<JoinClass />} />
             <Route path="/brevet-blanc" element={<BrevetBlanc />} />
-            <Route path="/teacher-class" element={<Dashboard />} />
-            <Route path="/teacher-docs" element={<Dashboard />} />
-            <Route path="/teacher-students" element={<Dashboard />} />
+            <Route path="/teacher-class" element={<TeacherClass />} />
+            <Route path="/teacher-docs" element={<TeacherDocs />} />
+            <Route path="/teacher-students" element={<TeacherStudents />} />
             <Route path="/ai-tutor" element={<AITutor />} />
             <Route path="/calendrier" element={<CalendrierPage />} />
-            <Route path="/learn" element={<Dashboard />} />
-            <Route path="/flashcards" element={<Dashboard />} />
-            <Route path="/badges" element={<Dashboard />} />
+            <Route path="/learn" element={<Learn />} />
+            <Route path="/flashcards" element={<Flashcards />} />
+            <Route path="/badges" element={<Badges />} />
             <Route path="/profil" element={<ProfilePage />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
