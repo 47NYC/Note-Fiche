@@ -25,35 +25,37 @@ import NotFound from "./pages/NotFound";
 const queryClient = new QueryClient();
 
 const App = () => (
-  <QueryClientProvider client={queryClient}>
-    <AuthProvider>
-      <TooltipProvider>
-        <Toaster />
-        <Sonner />
-        <BrowserRouter>
-          <Routes>
-            <Route path="/" element={<Navigate to="/dashboard" replace />} />
-            <Route path="/auth" element={<Auth />} />
-            <Route path="/reset-password" element={<ResetPassword />} />
-            <Route path="/dashboard" element={<Dashboard />} />
-            <Route path="/my-class" element={<JoinClass />} />
-            <Route path="/brevet-blanc" element={<BrevetBlanc />} />
-            <Route path="/teacher-class" element={<TeacherClass />} />
-            <Route path="/teacher-docs" element={<TeacherDocs />} />
-            <Route path="/teacher-students" element={<TeacherStudents />} />
-            <Route path="/ai-tutor" element={<AITutor />} />
-            <Route path="/calendrier" element={<CalendrierPage />} />
-            <Route path="/learn" element={<Learn />} />
-            <Route path="/flashcards" element={<Flashcards />} />
-            <Route path="/classement" element={<Leaderboard />} />
-            <Route path="/profil" element={<ProfilePage />} />
-            <Route path="/settings" element={<SettingsPage />} />
-            <Route path="*" element={<NotFound />} />
-          </Routes>
-        </BrowserRouter>
-      </TooltipProvider>
-    </AuthProvider>
-  </QueryClientProvider>
+  <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
+    <QueryClientProvider client={queryClient}>
+      <AuthProvider>
+        <TooltipProvider>
+          <Toaster />
+          <Sonner />
+          <BrowserRouter>
+            <Routes>
+              <Route path="/" element={<Navigate to="/dashboard" replace />} />
+              <Route path="/auth" element={<Auth />} />
+              <Route path="/reset-password" element={<ResetPassword />} />
+              <Route path="/dashboard" element={<Dashboard />} />
+              <Route path="/my-class" element={<JoinClass />} />
+              <Route path="/brevet-blanc" element={<BrevetBlanc />} />
+              <Route path="/teacher-class" element={<TeacherClass />} />
+              <Route path="/teacher-docs" element={<TeacherDocs />} />
+              <Route path="/teacher-students" element={<TeacherStudents />} />
+              <Route path="/ai-tutor" element={<AITutor />} />
+              <Route path="/calendrier" element={<CalendrierPage />} />
+              <Route path="/learn" element={<Learn />} />
+              <Route path="/flashcards" element={<Flashcards />} />
+              <Route path="/classement" element={<Leaderboard />} />
+              <Route path="/profil" element={<ProfilePage />} />
+              <Route path="/settings" element={<SettingsPage />} />
+              <Route path="*" element={<NotFound />} />
+            </Routes>
+          </BrowserRouter>
+        </TooltipProvider>
+      </AuthProvider>
+    </QueryClientProvider>
+  </ThemeProvider>
 );
 
 export default App;
