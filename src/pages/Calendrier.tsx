@@ -303,7 +303,7 @@ const CalendrierPage = () => {
                       onClick={() => setSelectedDate(parseISO(ev.eval_date))}
                       className="w-full flex items-center gap-3 p-2.5 rounded-lg hover:bg-muted/50 transition-colors text-left"
                     >
-                      <span className={cn("w-2.5 h-2.5 rounded-full shrink-0", getSubjectColor(ev.subject))} />
+                      <span className={cn("w-2.5 h-2.5 rounded-full shrink-0", getColor(ev.subject))} />
                       <div className="flex-1 min-w-0">
                         <p className="font-medium text-sm truncate">{ev.title}</p>
                         <p className="text-xs text-muted-foreground">{format(parseISO(ev.eval_date), "d MMM", { locale: fr })}</p>
