@@ -134,6 +134,7 @@ export type Database = {
       }
       evaluations: {
         Row: {
+          class_id: string | null
           color: string | null
           created_at: string
           description: string | null
@@ -144,6 +145,7 @@ export type Database = {
           user_id: string
         }
         Insert: {
+          class_id?: string | null
           color?: string | null
           created_at?: string
           description?: string | null
@@ -154,6 +156,7 @@ export type Database = {
           user_id: string
         }
         Update: {
+          class_id?: string | null
           color?: string | null
           created_at?: string
           description?: string | null
@@ -163,7 +166,15 @@ export type Database = {
           title?: string
           user_id?: string
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "evaluations_class_id_fkey"
+            columns: ["class_id"]
+            isOneToOne: false
+            referencedRelation: "classes"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       flashcards: {
         Row: {

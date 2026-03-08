@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { DashboardLayout } from "@/components/DashboardLayout";
 import { Calendar } from "@/components/ui/calendar";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -10,11 +10,14 @@ import { Badge } from "@/components/ui/badge";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import { Switch } from "@/components/ui/switch";
 import { CalendarIcon, Plus, Trash2, Edit2, BookOpen, Clock } from "lucide-react";
 import { format, isSameDay, parseISO, isAfter, isBefore, startOfDay } from "date-fns";
 import { fr } from "date-fns/locale";
 import { cn } from "@/lib/utils";
 import { useEvaluations, type Evaluation } from "@/hooks/useEvaluations";
+import { useAuth } from "@/hooks/useAuth";
+import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { Skeleton } from "@/components/ui/skeleton";
 
@@ -34,9 +37,19 @@ const getSubjectColor = (subject: string) =>
 
 const CalendrierPage = () => {
   const { data: evaluations, isLoading, addEvaluation, updateEvaluation, deleteEvaluation } = useEvaluations();
+  const { user, role } = useAuth();
   const [selectedDate, setSelectedDate] = useState<Date>(new Date());
   const [dialogOpen, setDialogOpen] = useState(false);
   const [editingEval, setEditingEval] = useState<Evaluation | null>(null);
+  const [classId, setClassId] = useState<string | null>(null);
+  const [shareWithClass, setShareWithClass] = useState(false);
+
+  // Fetch teacher's class_id
+  useEffect(() => {
+    if (role !== "teacher" || !user) return;
+    supabase.from("classes").select("id").eq("teacher_id", user.id).maybeSingle()
+      .then(({ data }) => { if (data) setClassId(data.id); });
+  }, [role, user]);
 
   // Form state
   const [title, setTitle] = useState("");
@@ -50,6 +63,7 @@ const CalendrierPage = () => {
     setDescription("");
     setEvalDate(new Date());
     setEditingEval(null);
+    setShareWithClass(false);
   };
 
   const openCreate = (date?: Date) => {
@@ -89,7 +103,9 @@ const CalendrierPage = () => {
           description,
           eval_date: format(evalDate, "yyyy-MM-dd"),
           color: "primary",
-        });
+          ...(shareWithClass && classId ? { class_id: classId } : {}),
+        } as any);
+
         toast.success("Évaluation ajoutée");
       }
       setDialogOpen(false);
@@ -186,6 +202,15 @@ const CalendrierPage = () => {
                   <Label>Description (optionnel)</Label>
                   <Textarea value={description} onChange={(e) => setDescription(e.target.value)} placeholder="Notes, chapitres à réviser..." rows={3} />
                 </div>
+                {role === "teacher" && classId && !editingEval && (
+                  <div className="flex items-center justify-between p-3 rounded-lg bg-muted/50">
+                    <div>
+                      <p className="text-sm font-medium">Partager avec la classe</p>
+                      <p className="text-xs text-muted-foreground">Visible par tous vos élèves</p>
+                    </div>
+                    <Switch checked={shareWithClass} onCheckedChange={setShareWithClass} />
+                  </div>
+                )}
                 <Button onClick={handleSubmit} className="w-full" disabled={addEvaluation.isPending || updateEvaluation.isPending}>
                   {editingEval ? "Enregistrer" : "Ajouter l'évaluation"}
                 </Button>
@@ -237,18 +262,25 @@ const CalendrierPage = () => {
                       <div key={ev.id} className="flex items-start gap-3 p-3 rounded-lg bg-muted/50 group">
                         <span className={cn("w-3 h-3 rounded-full mt-1 shrink-0", getSubjectColor(ev.subject))} />
                         <div className="flex-1 min-w-0">
-                          <p className="font-medium text-sm">{ev.title}</p>
+                          <p className="font-medium text-sm">
+                            {ev.title}
+                            {ev.class_id && ev.user_id !== user?.id && (
+                              <Badge variant="secondary" className="ml-2 text-[10px]">Prof</Badge>
+                            )}
+                          </p>
                           <p className="text-xs text-muted-foreground">{ev.subject}</p>
                           {ev.description && <p className="text-xs text-muted-foreground mt-1">{ev.description}</p>}
                         </div>
-                        <div className="flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
-                          <Button variant="ghost" size="icon" className="h-7 w-7" onClick={() => openEdit(ev)}>
-                            <Edit2 className="w-3.5 h-3.5" />
-                          </Button>
-                          <Button variant="ghost" size="icon" className="h-7 w-7 text-destructive" onClick={() => handleDelete(ev.id)}>
-                            <Trash2 className="w-3.5 h-3.5" />
-                          </Button>
-                        </div>
+                        {ev.user_id === user?.id && (
+                          <div className="flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                            <Button variant="ghost" size="icon" className="h-7 w-7" onClick={() => openEdit(ev)}>
+                              <Edit2 className="w-3.5 h-3.5" />
+                            </Button>
+                            <Button variant="ghost" size="icon" className="h-7 w-7 text-destructive" onClick={() => handleDelete(ev.id)}>
+                              <Trash2 className="w-3.5 h-3.5" />
+                            </Button>
+                          </div>
+                        )}
                       </div>
                     ))}
                   </div>
