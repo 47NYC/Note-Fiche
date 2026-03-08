@@ -11,6 +11,12 @@ import BrevetBlanc from "./pages/BrevetBlanc";
 import AITutor from "./pages/AITutor";
 import CalendrierPage from "./pages/Calendrier";
 import ProfilePage from "./pages/Profile";
+import TeacherClass from "./pages/TeacherClass";
+import TeacherDocs from "./pages/TeacherDocs";
+import TeacherStudents from "./pages/TeacherStudents";
+import Learn from "./pages/Learn";
+import Flashcards from "./pages/Flashcards";
+import Badges from "./pages/Badges";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
