@@ -25,6 +25,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 
 const CalendrierPage = () => {
   const { data: evaluations, isLoading, addEvaluation, updateEvaluation, deleteEvaluation } = useEvaluations();
+  const { subjects, subjectNames, getColor } = useSubjects();
   const { user, role } = useAuth();
   const [selectedDate, setSelectedDate] = useState<Date>(new Date());
   const [dialogOpen, setDialogOpen] = useState(false);
