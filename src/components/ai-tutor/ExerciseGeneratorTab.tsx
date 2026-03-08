@@ -64,6 +64,39 @@ export function ExerciseGeneratorTab() {
 
   const score = questions.reduce((acc, q, i) => acc + (answers[i] === q.correctIndex ? 1 : 0), 0);
 
+  const submitResults = async () => {
+    setShowResults(true);
+    if (sessionSaved.current) return;
+    sessionSaved.current = true;
+
+    const finalScore = questions.reduce((acc, q, i) => acc + (answers[i] === q.correctIndex ? 1 : 0), 0);
+    const scorePercent = Math.round((finalScore / questions.length) * 100);
+    const xp = finalScore * 10;
+
+    try {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) return;
+
+      await supabase.from("practice_sessions").insert({
+        user_id: user.id,
+        subject: subject,
+        cards_reviewed: questions.length,
+        correct_count: finalScore,
+        score: scorePercent,
+        points_earned: xp,
+        ended_at: new Date().toISOString(),
+      });
+
+      queryClient.invalidateQueries({ queryKey: ["student-stats"] });
+      queryClient.invalidateQueries({ queryKey: ["weekly-activity"] });
+      queryClient.invalidateQueries({ queryKey: ["recent-quizzes"] });
+      queryClient.invalidateQueries({ queryKey: ["subject-progress"] });
+      toast.success(`+${xp} XP gagnés !`);
+    } catch (e) {
+      console.error("Failed to save session:", e);
+    }
+  };
+
   return (
     <div className="space-y-6 p-4 overflow-y-auto max-h-[calc(100vh-220px)]">
       {/* Config */}
