@@ -36,9 +36,25 @@ const TeacherDashboard = () => {
     if (cls) {
       const { data: mems } = await supabase
         .from("class_members")
-        .select("*, profiles:student_id(full_name)")
+        .select("*")
         .eq("class_id", cls.id);
-      setMembers(mems || []);
+      
+      // Fetch profile names for members
+      if (mems && mems.length > 0) {
+        const studentIds = mems.map(m => m.student_id);
+        const { data: profiles } = await supabase
+          .from("profiles")
+          .select("user_id, full_name")
+          .in("user_id", studentIds);
+        
+        const enriched = mems.map(m => ({
+          ...m,
+          full_name: profiles?.find(p => p.user_id === m.student_id)?.full_name || "Élève",
+        }));
+        setMembers(enriched);
+      } else {
+        setMembers([]);
+      }
 
       const { data: docs } = await supabase
         .from("documents")
