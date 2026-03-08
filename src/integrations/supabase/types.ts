@@ -102,6 +102,42 @@ export type Database = {
           },
         ]
       }
+      practice_sessions: {
+        Row: {
+          cards_reviewed: number
+          correct_count: number
+          ended_at: string | null
+          id: string
+          points_earned: number
+          score: number
+          started_at: string
+          subject: string
+          user_id: string
+        }
+        Insert: {
+          cards_reviewed?: number
+          correct_count?: number
+          ended_at?: string | null
+          id?: string
+          points_earned?: number
+          score?: number
+          started_at?: string
+          subject?: string
+          user_id: string
+        }
+        Update: {
+          cards_reviewed?: number
+          correct_count?: number
+          ended_at?: string | null
+          id?: string
+          points_earned?: number
+          score?: number
+          started_at?: string
+          subject?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       profiles: {
         Row: {
           avatar_url: string | null
@@ -124,6 +160,33 @@ export type Database = {
           created_at?: string
           full_name?: string
           id?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      streaks: {
+        Row: {
+          current_streak: number
+          id: string
+          last_active_date: string | null
+          longest_streak: number
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          current_streak?: number
+          id?: string
+          last_active_date?: string | null
+          longest_streak?: number
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          current_streak?: number
+          id?: string
+          last_active_date?: string | null
+          longest_streak?: number
           updated_at?: string
           user_id?: string
         }
