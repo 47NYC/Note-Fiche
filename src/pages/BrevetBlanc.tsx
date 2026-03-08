@@ -17,10 +17,10 @@ import {
 import {
   Select, SelectContent, SelectItem, SelectTrigger, SelectValue,
 } from "@/components/ui/select";
-
-const SUBJECTS = ["Mathématiques", "Français", "Histoire-Géo", "Sciences", "Anglais", "Autre"];
+import { useSubjects } from "@/hooks/useSubjects";
 
 const BrevetBlanc = () => {
+  const { subjectNames } = useSubjects();
   const { user, role } = useAuth();
   const { toast } = useToast();
   const [documents, setDocuments] = useState<any[]>([]);
@@ -158,7 +158,7 @@ const BrevetBlanc = () => {
                         <SelectValue placeholder="Choisir une matière" />
                       </SelectTrigger>
                       <SelectContent>
-                        {SUBJECTS.map((s) => (
+                        {subjectNames.map((s) => (
                           <SelectItem key={s} value={s}>{s}</SelectItem>
                         ))}
                       </SelectContent>

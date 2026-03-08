@@ -9,8 +9,7 @@ import { Loader2, Sparkles, CheckCircle2, XCircle, RotateCcw } from "lucide-reac
 import { supabase } from "@/integrations/supabase/client";
 import { useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
-
-const SUBJECTS = ["Mathématiques", "Français", "Histoire-Géographie", "Physique-Chimie", "SVT", "Technologie"];
+import { useSubjects } from "@/hooks/useSubjects";
 const DIFFICULTIES = [
   { value: "facile", label: "Facile" },
   { value: "moyen", label: "Moyen" },
@@ -25,6 +24,7 @@ type Question = {
 };
 
 export function ExerciseGeneratorTab() {
+  const { subjectNames } = useSubjects();
   const [subject, setSubject] = useState("");
   const [topic, setTopic] = useState("");
   const [difficulty, setDifficulty] = useState("moyen");
@@ -115,7 +115,7 @@ export function ExerciseGeneratorTab() {
               <Select value={subject} onValueChange={setSubject}>
                 <SelectTrigger><SelectValue placeholder="Choisis une matière" /></SelectTrigger>
                 <SelectContent>
-                  {SUBJECTS.map((s) => <SelectItem key={s} value={s}>{s}</SelectItem>)}
+                  {subjectNames.map((s) => <SelectItem key={s} value={s}>{s}</SelectItem>)}
                 </SelectContent>
               </Select>
             </div>

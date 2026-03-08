@@ -2,28 +2,13 @@ import { DashboardLayout } from "@/components/DashboardLayout";
 import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import {
-  Search, BookOpen, Palette, Calculator, Globe, FlaskConical,
-  Music, Dumbbell, Monitor, Languages, MapPin, ArrowLeft, FileText, Brain,
-} from "lucide-react";
+import { Search, BookOpen, ArrowLeft, Brain } from "lucide-react";
 import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import StructuredDocViewer from "@/components/learn/StructuredDocViewer";
 import { Badge } from "@/components/ui/badge";
-
-const SUBJECTS = [
-  { name: "Mathématiques", icon: Calculator, color: "bg-green-100 text-green-600" },
-  { name: "Français", icon: BookOpen, color: "bg-blue-100 text-blue-600" },
-  { name: "Histoire-Géo EMC", icon: MapPin, color: "bg-yellow-100 text-yellow-600" },
-  { name: "Sciences (SVT)", icon: FlaskConical, color: "bg-emerald-100 text-emerald-600" },
-  { name: "Physique-Chimie", icon: FlaskConical, color: "bg-orange-100 text-orange-600" },
-  { name: "Anglais", icon: Languages, color: "bg-purple-100 text-purple-600" },
-  { name: "Espagnol", icon: Globe, color: "bg-red-100 text-red-600" },
-  { name: "Art Plastiques", icon: Palette, color: "bg-pink-100 text-pink-600" },
-  { name: "Musique", icon: Music, color: "bg-fuchsia-100 text-fuchsia-600" },
-  { name: "EPS", icon: Dumbbell, color: "bg-teal-100 text-teal-600" },
-  { name: "Technologie", icon: Monitor, color: "bg-sky-100 text-sky-600" },
-];
+import { useSubjects } from "@/hooks/useSubjects";
+import { cn } from "@/lib/utils";
 
 type ViewState =
   | { type: "grid" }
@@ -31,6 +16,7 @@ type ViewState =
   | { type: "doc"; doc: any };
 
 const Learn = () => {
+  const { subjects, getColor } = useSubjects();
   const [search, setSearch] = useState("");
   const [view, setView] = useState<ViewState>({ type: "grid" });
   const [structuredDocs, setStructuredDocs] = useState<any[]>([]);
@@ -57,7 +43,7 @@ const Learn = () => {
     setCounts(c);
   };
 
-  const filtered = SUBJECTS.filter((s) =>
+  const filtered = subjects.filter((s) =>
     s.name.toLowerCase().includes(search.toLowerCase())
   );
 
@@ -84,8 +70,8 @@ const Learn = () => {
 
   // View: subject fiches list
   if (view.type === "subject") {
-    const subjectInfo = SUBJECTS.find((s) => s.name === view.name);
-    const Icon = subjectInfo?.icon || BookOpen;
+    const subjectInfo = subjects.find((s) => s.name === view.name);
+    const subjectColor = subjectInfo?.color ?? "bg-primary";
     const subjectDocs = structuredDocs.filter((d) => d.subject === view.name);
 
     return (
@@ -95,8 +81,8 @@ const Learn = () => {
             <Button variant="ghost" size="icon" onClick={() => setView({ type: "grid" })}>
               <ArrowLeft className="w-5 h-5" />
             </Button>
-            <div className={`w-10 h-10 rounded-xl flex items-center justify-center ${subjectInfo?.color}`}>
-              <Icon className="w-5 h-5" />
+            <div className={cn("w-10 h-10 rounded-xl flex items-center justify-center text-white", subjectColor)}>
+              <BookOpen className="w-5 h-5" />
             </div>
             <h1 className="text-2xl font-heading font-bold">{view.name}</h1>
             <span className="text-muted-foreground text-sm">({subjectDocs.length} fiches)</span>
@@ -193,8 +179,8 @@ const Learn = () => {
                 onClick={() => setView({ type: "subject", name: subject.name })}
               >
                 <CardContent className="p-4 flex items-center gap-3">
-                  <div className={`w-11 h-11 rounded-xl flex items-center justify-center shrink-0 ${subject.color}`}>
-                    <subject.icon className="w-5 h-5" />
+                  <div className={cn("w-11 h-11 rounded-xl flex items-center justify-center shrink-0 text-white", subject.color)}>
+                    <BookOpen className="w-5 h-5" />
                   </div>
                   <div className="min-w-0 flex-1">
                     <p className="font-medium text-sm truncate">{subject.name}</p>

@@ -18,25 +18,14 @@ import { cn } from "@/lib/utils";
 import { useEvaluations, type Evaluation } from "@/hooks/useEvaluations";
 import { useAuth } from "@/hooks/useAuth";
 import { supabase } from "@/integrations/supabase/client";
+import { useSubjects } from "@/hooks/useSubjects";
 import { toast } from "sonner";
 import { Skeleton } from "@/components/ui/skeleton";
 
-const SUBJECTS = [
-  { value: "Mathématiques", color: "bg-blue-500" },
-  { value: "Français", color: "bg-rose-500" },
-  { value: "Histoire-Géographie", color: "bg-amber-500" },
-  { value: "Physique-Chimie", color: "bg-emerald-500" },
-  { value: "SVT", color: "bg-green-500" },
-  { value: "Technologie", color: "bg-purple-500" },
-  { value: "Anglais", color: "bg-cyan-500" },
-  { value: "Autre", color: "bg-gray-500" },
-];
-
-const getSubjectColor = (subject: string) =>
-  SUBJECTS.find((s) => s.value === subject)?.color || "bg-primary";
 
 const CalendrierPage = () => {
   const { data: evaluations, isLoading, addEvaluation, updateEvaluation, deleteEvaluation } = useEvaluations();
+  const { subjects, subjectNames, getColor } = useSubjects();
   const { user, role } = useAuth();
   const [selectedDate, setSelectedDate] = useState<Date>(new Date());
   const [dialogOpen, setDialogOpen] = useState(false);
@@ -167,11 +156,11 @@ const CalendrierPage = () => {
                   <Select value={subject} onValueChange={setSubject}>
                     <SelectTrigger><SelectValue placeholder="Choisis une matière" /></SelectTrigger>
                     <SelectContent>
-                      {SUBJECTS.map((s) => (
-                        <SelectItem key={s.value} value={s.value}>
+                      {subjects.map((s) => (
+                        <SelectItem key={s.name} value={s.name}>
                           <span className="flex items-center gap-2">
                             <span className={cn("w-2.5 h-2.5 rounded-full", s.color)} />
-                            {s.value}
+                            {s.name}
                           </span>
                         </SelectItem>
                       ))}
@@ -260,7 +249,7 @@ const CalendrierPage = () => {
                   <div className="space-y-2">
                     {selectedEvals.map((ev) => (
                       <div key={ev.id} className="flex items-start gap-3 p-3 rounded-lg bg-muted/50 group">
-                        <span className={cn("w-3 h-3 rounded-full mt-1 shrink-0", getSubjectColor(ev.subject))} />
+                        <span className={cn("w-3 h-3 rounded-full mt-1 shrink-0", getColor(ev.subject))} />
                         <div className="flex-1 min-w-0">
                           <p className="font-medium text-sm">
                             {ev.title}
@@ -314,7 +303,7 @@ const CalendrierPage = () => {
                       onClick={() => setSelectedDate(parseISO(ev.eval_date))}
                       className="w-full flex items-center gap-3 p-2.5 rounded-lg hover:bg-muted/50 transition-colors text-left"
                     >
-                      <span className={cn("w-2.5 h-2.5 rounded-full shrink-0", getSubjectColor(ev.subject))} />
+                      <span className={cn("w-2.5 h-2.5 rounded-full shrink-0", getColor(ev.subject))} />
                       <div className="flex-1 min-w-0">
                         <p className="font-medium text-sm truncate">{ev.title}</p>
                         <p className="text-xs text-muted-foreground">{format(parseISO(ev.eval_date), "d MMM", { locale: fr })}</p>
@@ -354,12 +343,12 @@ const CalendrierPage = () => {
                 {evaluations && evaluations.length > 0 && (
                   <div className="mt-4 space-y-2">
                     <p className="text-xs font-medium text-muted-foreground uppercase tracking-wider">Par matière</p>
-                    {SUBJECTS.filter((s) => evaluations.some((e) => e.subject === s.value)).map((s) => {
-                      const count = evaluations.filter((e) => e.subject === s.value).length;
+                    {subjects.filter((s) => evaluations.some((e) => e.subject === s.name)).map((s) => {
+                      const count = evaluations.filter((e) => e.subject === s.name).length;
                       return (
-                        <div key={s.value} className="flex items-center gap-2">
+                        <div key={s.name} className="flex items-center gap-2">
                           <span className={cn("w-2.5 h-2.5 rounded-full", s.color)} />
-                          <span className="text-sm flex-1">{s.value}</span>
+                          <span className="text-sm flex-1">{s.name}</span>
                           <span className="text-sm font-medium">{count}</span>
                         </div>
                       );

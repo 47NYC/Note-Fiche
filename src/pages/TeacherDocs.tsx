@@ -7,19 +7,23 @@ import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useAuth } from "@/hooks/useAuth";
 import { supabase } from "@/integrations/supabase/client";
-import { FileText, Trash2, Brain, Loader2, CheckCircle, Link, ExternalLink } from "lucide-react";
+import { FileText, Trash2, Brain, Loader2, CheckCircle, Link, ExternalLink, Plus, X } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { Badge } from "@/components/ui/badge";
+import { useSubjects } from "@/hooks/useSubjects";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { cn } from "@/lib/utils";
 
-const SUBJECTS = [
-  "Mathématiques", "Français", "Histoire-Géo EMC", "Sciences (SVT)",
-  "Physique-Chimie", "Anglais", "Espagnol", "Art Plastiques",
-  "Musique", "EPS", "Technologie",
+const SUBJECT_COLORS = [
+  "bg-blue-500", "bg-rose-500", "bg-amber-500", "bg-green-500", "bg-emerald-500",
+  "bg-cyan-500", "bg-red-500", "bg-pink-500", "bg-fuchsia-500", "bg-teal-500", "bg-purple-500",
+  "bg-orange-500", "bg-indigo-500", "bg-lime-500", "bg-sky-500",
 ];
 
 const TeacherDocs = () => {
   const { user } = useAuth();
   const { toast } = useToast();
+  const { subjects, subjectNames, addSubject, removeSubject } = useSubjects();
   const [classData, setClassData] = useState<any>(null);
   const [documents, setDocuments] = useState<any[]>([]);
   const [processedIds, setProcessedIds] = useState<Set<string>>(new Set());
@@ -28,6 +32,8 @@ const TeacherDocs = () => {
   const [docTitle, setDocTitle] = useState("");
   const [docSubject, setDocSubject] = useState("");
   const [googleDocUrl, setGoogleDocUrl] = useState("");
+  const [newSubjectName, setNewSubjectName] = useState("");
+  const [subjectDialogOpen, setSubjectDialogOpen] = useState(false);
 
   useEffect(() => {
     if (!user) return;
@@ -141,6 +147,36 @@ const TeacherDocs = () => {
     toast({ title: "Document supprimé" });
   };
 
+  const handleAddSubject = async () => {
+    if (!newSubjectName.trim() || !classData) return;
+    try {
+      await addSubject.mutateAsync({
+        name: newSubjectName.trim(),
+        color: SUBJECT_COLORS[subjects.length % SUBJECT_COLORS.length],
+        classId: classData.id,
+      });
+      setNewSubjectName("");
+      toast({ title: "Matière ajoutée !" });
+    } catch {
+      toast({ title: "Erreur", description: "Cette matière existe peut-être déjà", variant: "destructive" });
+    }
+  };
+
+  const handleRemoveSubject = async (subjectId: string, subjectName: string) => {
+    // Check if any documents use this subject
+    const hasDoc = documents.some((d) => d.folder === subjectName);
+    if (hasDoc) {
+      toast({ title: "Impossible", description: "Cette matière contient des documents. Supprimez-les d'abord.", variant: "destructive" });
+      return;
+    }
+    try {
+      await removeSubject.mutateAsync(subjectId);
+      toast({ title: "Matière supprimée" });
+    } catch {
+      toast({ title: "Erreur", description: "Impossible de supprimer la matière", variant: "destructive" });
+    }
+  };
+
   return (
     <DashboardLayout>
       <div className="space-y-6 max-w-4xl">
@@ -170,7 +206,7 @@ const TeacherDocs = () => {
                   <SelectValue placeholder="Choisir une matière" />
                 </SelectTrigger>
                 <SelectContent>
-                  {SUBJECTS.map((s) => (
+                  {subjectNames.map((s) => (
                     <SelectItem key={s} value={s}>{s}</SelectItem>
                   ))}
                 </SelectContent>
@@ -196,6 +232,73 @@ const TeacherDocs = () => {
               <Link className="w-4 h-4 mr-2" />
               {adding ? "Ajout en cours..." : "Ajouter et structurer"}
             </Button>
+          </CardContent>
+        </Card>
+
+        {/* Subject management */}
+        <Card className="glass-card">
+          <CardHeader>
+            <CardTitle className="font-heading flex items-center justify-between">
+              <span>Matières ({subjects.length})</span>
+              <Dialog open={subjectDialogOpen} onOpenChange={setSubjectDialogOpen}>
+                <DialogTrigger asChild>
+                  <Button size="sm" variant="outline">
+                    <Plus className="w-4 h-4 mr-1" /> Ajouter
+                  </Button>
+                </DialogTrigger>
+                <DialogContent>
+                  <DialogHeader>
+                    <DialogTitle>Ajouter une matière</DialogTitle>
+                  </DialogHeader>
+                  <div className="space-y-4 mt-2">
+                    <div className="space-y-2">
+                      <Label>Nom de la matière</Label>
+                      <Input
+                        value={newSubjectName}
+                        onChange={(e) => setNewSubjectName(e.target.value)}
+                        placeholder="Ex: Latin, Allemand..."
+                        onKeyDown={(e) => { if (e.key === "Enter") handleAddSubject(); }}
+                      />
+                    </div>
+                    <Button onClick={() => { handleAddSubject(); setSubjectDialogOpen(false); }} className="w-full" disabled={!newSubjectName.trim()}>
+                      Ajouter la matière
+                    </Button>
+                  </div>
+                </DialogContent>
+              </Dialog>
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="flex flex-wrap gap-2">
+              {subjects.map((s) => {
+                const hasDoc = documents.some((d) => d.folder === s.name);
+                return (
+                  <div
+                    key={s.id}
+                    className={cn(
+                      "flex items-center gap-2 px-3 py-1.5 rounded-full text-sm border",
+                      hasDoc ? "bg-muted/50" : "bg-muted/30"
+                    )}
+                  >
+                    <span className={cn("w-2.5 h-2.5 rounded-full", s.color)} />
+                    <span>{s.name}</span>
+                    {hasDoc ? (
+                      <Badge variant="secondary" className="text-[10px] ml-1">docs</Badge>
+                    ) : (
+                      <button
+                        onClick={() => handleRemoveSubject(s.id, s.name)}
+                        className="ml-1 text-muted-foreground hover:text-destructive transition-colors"
+                      >
+                        <X className="w-3.5 h-3.5" />
+                      </button>
+                    )}
+                  </div>
+                );
+              })}
+            </div>
+            <p className="text-xs text-muted-foreground mt-3">
+              Les matières avec des documents ne peuvent pas être supprimées.
+            </p>
           </CardContent>
         </Card>
 
