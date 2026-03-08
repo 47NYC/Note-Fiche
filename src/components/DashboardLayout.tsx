@@ -5,7 +5,9 @@ import { useFlashcardReminder } from "@/hooks/useFlashcardReminder";
 
 export function DashboardLayout({ children }: { children: ReactNode }) {
   useFlashcardReminder();
-    return (
+
+  return (
+    <SidebarProvider>
       <div className="min-h-screen flex w-full">
         <AppSidebar />
         <div className="flex-1 flex flex-col">
