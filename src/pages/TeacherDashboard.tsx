@@ -161,9 +161,9 @@ const TeacherDashboard = () => {
                   {members.map((m) => (
                     <div key={m.id} className="flex items-center gap-3 p-2 rounded-lg bg-secondary/50">
                       <div className="w-8 h-8 rounded-full gradient-primary flex items-center justify-center text-primary-foreground text-sm font-bold">
-                        {(m.profiles as any)?.full_name?.[0] || "?"}
+                        {m.full_name?.[0] || "?"}
                       </div>
-                      <span className="font-medium text-sm">{(m.profiles as any)?.full_name || "Élève"}</span>
+                      <span className="font-medium text-sm">{m.full_name || "Élève"}</span>
                     </div>
                   ))}
                 </div>
