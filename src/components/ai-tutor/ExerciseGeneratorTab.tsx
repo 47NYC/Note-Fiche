@@ -33,7 +33,8 @@ export function ExerciseGeneratorTab() {
   const [questions, setQuestions] = useState<Question[]>([]);
   const [answers, setAnswers] = useState<Record<number, number>>({});
   const [showResults, setShowResults] = useState(false);
-
+  const sessionSaved = useRef(false);
+  const queryClient = useQueryClient();
   const generate = async () => {
     if (!subject) { toast.error("Choisis une matière"); return; }
     setLoading(true);
