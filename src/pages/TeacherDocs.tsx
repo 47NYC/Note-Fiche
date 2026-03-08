@@ -7,15 +7,12 @@ import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useAuth } from "@/hooks/useAuth";
 import { supabase } from "@/integrations/supabase/client";
-import { FileText, Trash2, Brain, Loader2, CheckCircle, Link, ExternalLink } from "lucide-react";
+import { FileText, Trash2, Brain, Loader2, CheckCircle, Link, ExternalLink, Plus, X } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { Badge } from "@/components/ui/badge";
-
-const SUBJECTS = [
-  "Mathématiques", "Français", "Histoire-Géo EMC", "Sciences (SVT)",
-  "Physique-Chimie", "Anglais", "Espagnol", "Art Plastiques",
-  "Musique", "EPS", "Technologie",
-];
+import { useSubjects } from "@/hooks/useSubjects";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { cn } from "@/lib/utils";
 
 const TeacherDocs = () => {
   const { user } = useAuth();
