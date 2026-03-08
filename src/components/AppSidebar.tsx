@@ -3,6 +3,7 @@ import {
   BookOpen,
   Brain,
   Trophy,
+  Crown,
   Users,
   FileText,
   Settings,
