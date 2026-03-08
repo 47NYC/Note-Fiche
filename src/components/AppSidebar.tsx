@@ -29,9 +29,10 @@ import { Button } from "@/components/ui/button";
 
 const studentItems = [
   { title: "Dashboard", url: "/dashboard", icon: LayoutDashboard },
+  { title: "Tuteur IA", url: "/ai-tutor", icon: Brain },
   { title: "Brevet Blanc", url: "/brevet-blanc", icon: GraduationCap },
   { title: "Apprendre", url: "/learn", icon: BookOpen },
-  { title: "Flashcards", url: "/flashcards", icon: Brain },
+  { title: "Flashcards", url: "/flashcards", icon: Flame },
   { title: "Ma classe", url: "/my-class", icon: Users },
   { title: "Badges", url: "/badges", icon: Trophy },
 ];
