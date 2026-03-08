@@ -1,15 +1,17 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "@/hooks/useAuth";
+import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { GraduationCap, BookOpen, Flame } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+import { toast as sonnerToast } from "sonner";
 
 const Auth = () => {
-  const [isLogin, setIsLogin] = useState(true);
+  const [mode, setMode] = useState<"login" | "signup" | "forgot">("login");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [fullName, setFullName] = useState("");
@@ -23,12 +25,20 @@ const Auth = () => {
     e.preventDefault();
     setSubmitting(true);
     try {
-      if (isLogin) {
+      if (mode === "forgot") {
+        const { error } = await supabase.auth.resetPasswordForEmail(email, {
+          redirectTo: `${window.location.origin}/reset-password`,
+        });
+        if (error) throw error;
+        sonnerToast.success("Email envoyé ! Vérifie ta boîte de réception.");
+        setMode("login");
+      } else if (mode === "login") {
         await signIn(email, password);
+        navigate("/dashboard");
       } else {
         await signUp(email, password, fullName, selectedRole);
+        navigate("/dashboard");
       }
-      navigate("/dashboard");
     } catch (err: any) {
       toast({
         title: "Erreur",
@@ -46,10 +56,8 @@ const Auth = () => {
         {/* Logo */}
         <div className="text-center space-y-2">
           <div className="inline-flex items-center gap-2">
-            <div className="w-10 h-10 rounded-xl gradient-primary flex items-center justify-center">
-              <Flame className="w-6 h-6 text-primary-foreground" />
-            </div>
-            <h1 className="text-3xl font-heading font-bold text-gradient-primary">BrevetIA</h1>
+            <img src="/logo.png" alt="NoteFiche" className="w-10 h-10 rounded-xl" />
+            <h1 className="text-3xl font-heading font-bold text-gradient-primary">NoteFiche</h1>
           </div>
           <p className="text-muted-foreground">Prépare ton brevet avec l'IA</p>
         </div>
@@ -57,15 +65,19 @@ const Auth = () => {
         <Card className="glass-card">
           <CardHeader className="text-center">
             <CardTitle className="font-heading">
-              {isLogin ? "Connexion" : "Inscription"}
+              {mode === "forgot" ? "Mot de passe oublié" : mode === "login" ? "Connexion" : "Inscription"}
             </CardTitle>
             <CardDescription>
-              {isLogin ? "Content de te revoir !" : "Crée ton compte pour commencer"}
+              {mode === "forgot"
+                ? "Entre ton email pour recevoir un lien de réinitialisation"
+                : mode === "login"
+                ? "Content de te revoir !"
+                : "Crée ton compte pour commencer"}
             </CardDescription>
           </CardHeader>
           <CardContent>
             <form onSubmit={handleSubmit} className="space-y-4">
-              {!isLogin && (
+              {mode === "signup" && (
                 <>
                   <div className="space-y-2">
                     <Label htmlFor="fullName">Nom complet</Label>
@@ -78,7 +90,6 @@ const Auth = () => {
                     />
                   </div>
 
-                  {/* Role selection */}
                   <div className="space-y-2">
                     <Label>Je suis...</Label>
                     <div className="grid grid-cols-2 gap-3">
@@ -125,32 +136,57 @@ const Auth = () => {
                 />
               </div>
 
-              <div className="space-y-2">
-                <Label htmlFor="password">Mot de passe</Label>
-                <Input
-                  id="password"
-                  type="password"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  placeholder="••••••••"
-                  required
-                  minLength={6}
-                />
-              </div>
+              {mode !== "forgot" && (
+                <div className="space-y-2">
+                  <div className="flex items-center justify-between">
+                    <Label htmlFor="password">Mot de passe</Label>
+                    {mode === "login" && (
+                      <button
+                        type="button"
+                        onClick={() => setMode("forgot")}
+                        className="text-xs text-primary hover:underline"
+                      >
+                        Mot de passe oublié ?
+                      </button>
+                    )}
+                  </div>
+                  <Input
+                    id="password"
+                    type="password"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    placeholder="••••••••"
+                    required
+                    minLength={6}
+                  />
+                </div>
+              )}
 
               <Button type="submit" variant="gradient" className="w-full" size="lg" disabled={submitting}>
-                {submitting ? "Chargement..." : isLogin ? "Se connecter" : "Créer mon compte"}
+                {submitting
+                  ? "Chargement..."
+                  : mode === "forgot"
+                  ? "Envoyer le lien"
+                  : mode === "login"
+                  ? "Se connecter"
+                  : "Créer mon compte"}
               </Button>
             </form>
 
-            <div className="mt-4 text-center">
-              <button
-                type="button"
-                onClick={() => setIsLogin(!isLogin)}
-                className="text-sm text-primary hover:underline"
-              >
-                {isLogin ? "Pas encore de compte ? Inscris-toi" : "Déjà un compte ? Connecte-toi"}
-              </button>
+            <div className="mt-4 text-center space-y-1">
+              {mode === "forgot" ? (
+                <button type="button" onClick={() => setMode("login")} className="text-sm text-primary hover:underline">
+                  Retour à la connexion
+                </button>
+              ) : (
+                <button
+                  type="button"
+                  onClick={() => setMode(mode === "login" ? "signup" : "login")}
+                  className="text-sm text-primary hover:underline"
+                >
+                  {mode === "login" ? "Pas encore de compte ? Inscris-toi" : "Déjà un compte ? Connecte-toi"}
+                </button>
+              )}
             </div>
           </CardContent>
         </Card>
