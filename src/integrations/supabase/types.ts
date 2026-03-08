@@ -285,6 +285,41 @@ export type Database = {
         }
         Relationships: []
       }
+      structured_documents: {
+        Row: {
+          content: Json
+          created_at: string
+          document_id: string
+          id: string
+          subject: string
+          title: string
+        }
+        Insert: {
+          content?: Json
+          created_at?: string
+          document_id: string
+          id?: string
+          subject?: string
+          title: string
+        }
+        Update: {
+          content?: Json
+          created_at?: string
+          document_id?: string
+          id?: string
+          subject?: string
+          title?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "structured_documents_document_id_fkey"
+            columns: ["document_id"]
+            isOneToOne: false
+            referencedRelation: "documents"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       user_preferences: {
         Row: {
           difficulty: string
