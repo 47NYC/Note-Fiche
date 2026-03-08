@@ -72,7 +72,9 @@ export type Database = {
           class_id: string
           created_at: string
           file_path: string
+          folder: string
           id: string
+          is_brevet_blanc: boolean
           teacher_id: string
           title: string
         }
@@ -80,7 +82,9 @@ export type Database = {
           class_id: string
           created_at?: string
           file_path: string
+          folder?: string
           id?: string
+          is_brevet_blanc?: boolean
           teacher_id: string
           title: string
         }
@@ -88,7 +92,9 @@ export type Database = {
           class_id?: string
           created_at?: string
           file_path?: string
+          folder?: string
           id?: string
+          is_brevet_blanc?: boolean
           teacher_id?: string
           title?: string
         }
