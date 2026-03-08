@@ -45,7 +45,6 @@ const App = () => (
             <Route path="/calendrier" element={<CalendrierPage />} />
             <Route path="/learn" element={<Learn />} />
             <Route path="/flashcards" element={<Flashcards />} />
-            <Route path="/badges" element={<Badges />} />
             <Route path="/classement" element={<Leaderboard />} />
             <Route path="/profil" element={<ProfilePage />} />
             <Route path="/settings" element={<SettingsPage />} />
