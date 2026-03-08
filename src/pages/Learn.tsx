@@ -16,6 +16,7 @@ type ViewState =
   | { type: "doc"; doc: any };
 
 const Learn = () => {
+  const { subjects, getColor } = useSubjects();
   const [search, setSearch] = useState("");
   const [view, setView] = useState<ViewState>({ type: "grid" });
   const [structuredDocs, setStructuredDocs] = useState<any[]>([]);
