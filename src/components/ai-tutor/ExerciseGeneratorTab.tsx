@@ -24,6 +24,7 @@ type Question = {
 };
 
 export function ExerciseGeneratorTab() {
+  const { subjectNames } = useSubjects();
   const [subject, setSubject] = useState("");
   const [topic, setTopic] = useState("");
   const [difficulty, setDifficulty] = useState("moyen");
