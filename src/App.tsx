@@ -18,6 +18,7 @@ import Learn from "./pages/Learn";
 import Flashcards from "./pages/Flashcards";
 import Badges from "./pages/Badges";
 import Leaderboard from "./pages/Leaderboard";
+import SettingsPage from "./pages/Settings";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -45,6 +46,7 @@ const App = () => (
             <Route path="/badges" element={<Badges />} />
             <Route path="/classement" element={<Leaderboard />} />
             <Route path="/profil" element={<ProfilePage />} />
+            <Route path="/settings" element={<SettingsPage />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </BrowserRouter>
