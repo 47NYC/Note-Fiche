@@ -191,7 +191,7 @@ export function ExerciseGeneratorTab() {
 
           <div className="flex gap-3">
             {!showResults ? (
-              <Button onClick={() => setShowResults(true)} disabled={Object.keys(answers).length < questions.length} className="flex-1">
+              <Button onClick={submitResults} disabled={Object.keys(answers).length < questions.length} className="flex-1">
                 Vérifier mes réponses
               </Button>
             ) : (
