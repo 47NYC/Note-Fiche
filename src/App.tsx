@@ -18,8 +18,8 @@ import TeacherDocs from "./pages/TeacherDocs";
 import TeacherStudents from "./pages/TeacherStudents";
 import Learn from "./pages/Learn";
 import Flashcards from "./pages/Flashcards";
-import Badges from "./pages/Badges";
 import Leaderboard from "./pages/Leaderboard";
+import NotFound from "./pages/NotFound";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
