@@ -4,10 +4,17 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useAuth } from "@/hooks/useAuth";
 import { supabase } from "@/integrations/supabase/client";
 import { Upload, FileText, Download, Trash2 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+
+const SUBJECTS = [
+  "Mathématiques", "Français", "Histoire-Géo EMC", "Sciences (SVT)",
+  "Physique-Chimie", "Anglais", "Espagnol", "Art Plastiques",
+  "Musique", "EPS", "Technologie",
+];
 
 const TeacherDocs = () => {
   const { user } = useAuth();
@@ -16,6 +23,7 @@ const TeacherDocs = () => {
   const [documents, setDocuments] = useState<any[]>([]);
   const [uploading, setUploading] = useState(false);
   const [docTitle, setDocTitle] = useState("");
+  const [docSubject, setDocSubject] = useState("");
 
   useEffect(() => {
     if (!user) return;
@@ -49,6 +57,10 @@ const TeacherDocs = () => {
       toast({ title: "Erreur", description: "Ajoutez un titre au document", variant: "destructive" });
       return;
     }
+    if (!docSubject) {
+      toast({ title: "Erreur", description: "Sélectionnez une matière", variant: "destructive" });
+      return;
+    }
 
     setUploading(true);
     const filePath = `${classData.id}/${Date.now()}_${file.name}`;
@@ -67,10 +79,11 @@ const TeacherDocs = () => {
       teacher_id: user.id,
       title: docTitle,
       file_path: filePath,
+      folder: docSubject,
     });
 
     setDocTitle("");
-    // Reset file input
+    setDocSubject("");
     e.target.value = "";
     await loadData();
     setUploading(false);
@@ -99,7 +112,6 @@ const TeacherDocs = () => {
           Documents
         </h1>
 
-        {/* Upload form */}
         <Card className="glass-card">
           <CardHeader>
             <CardTitle className="font-heading">Ajouter un document</CardTitle>
@@ -113,6 +125,19 @@ const TeacherDocs = () => {
                 onChange={(e) => setDocTitle(e.target.value)}
                 placeholder="Ex: Fiche Pythagore"
               />
+            </div>
+            <div>
+              <Label>Matière</Label>
+              <Select value={docSubject} onValueChange={setDocSubject}>
+                <SelectTrigger>
+                  <SelectValue placeholder="Choisir une matière" />
+                </SelectTrigger>
+                <SelectContent>
+                  {SUBJECTS.map((s) => (
+                    <SelectItem key={s} value={s}>{s}</SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
             </div>
             <label className="cursor-pointer block">
               <Button variant="outline" className="w-full" disabled={uploading} asChild>
@@ -131,7 +156,6 @@ const TeacherDocs = () => {
           </CardContent>
         </Card>
 
-        {/* Documents list */}
         <Card className="glass-card">
           <CardHeader>
             <CardTitle className="font-heading">
@@ -152,23 +176,14 @@ const TeacherDocs = () => {
                     <div className="flex-1 min-w-0">
                       <p className="font-medium text-sm truncate">{doc.title}</p>
                       <p className="text-xs text-muted-foreground">
+                        {doc.folder && <span className="mr-2">{doc.folder}</span>}
                         {new Date(doc.created_at).toLocaleDateString("fr-FR")}
                       </p>
                     </div>
-                    <Button
-                      variant="ghost"
-                      size="icon"
-                      className="shrink-0"
-                      onClick={() => downloadDoc(doc.file_path)}
-                    >
+                    <Button variant="ghost" size="icon" className="shrink-0" onClick={() => downloadDoc(doc.file_path)}>
                       <Download className="w-4 h-4" />
                     </Button>
-                    <Button
-                      variant="ghost"
-                      size="icon"
-                      className="shrink-0 text-destructive"
-                      onClick={() => deleteDoc(doc.id, doc.file_path)}
-                    >
+                    <Button variant="ghost" size="icon" className="shrink-0 text-destructive" onClick={() => deleteDoc(doc.id, doc.file_path)}>
                       <Trash2 className="w-4 h-4" />
                     </Button>
                   </div>
