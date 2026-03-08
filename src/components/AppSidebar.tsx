@@ -67,11 +67,9 @@ export function AppSidebar() {
       <SidebarContent>
         {/* Logo */}
         <div className={`p-4 flex items-center gap-2 ${collapsed ? "justify-center" : ""}`}>
-          <div className="w-8 h-8 rounded-lg gradient-primary flex items-center justify-center shrink-0">
-            <Flame className="w-5 h-5 text-primary-foreground" />
-          </div>
+          <img src="/logo.png" alt="NoteFiche" className="w-8 h-8 rounded-lg shrink-0" />
           {!collapsed && (
-            <span className="font-heading font-bold text-lg text-gradient-primary">BrevetIA</span>
+            <span className="font-heading font-bold text-lg text-gradient-primary">NoteFiche</span>
           )}
         </div>
 
