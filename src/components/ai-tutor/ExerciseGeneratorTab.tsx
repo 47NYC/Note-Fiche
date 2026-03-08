@@ -41,6 +41,7 @@ export function ExerciseGeneratorTab() {
     setQuestions([]);
     setAnswers({});
     setShowResults(false);
+    sessionSaved.current = false;
 
     try {
       const { data, error } = await supabase.functions.invoke("ai-generate-exercises", {
