@@ -91,6 +91,7 @@ export function ExerciseGeneratorTab() {
       queryClient.invalidateQueries({ queryKey: ["weekly-activity"] });
       queryClient.invalidateQueries({ queryKey: ["recent-quizzes"] });
       queryClient.invalidateQueries({ queryKey: ["subject-progress"] });
+      queryClient.invalidateQueries({ queryKey: ["achievements"] });
       toast.success(`+${xp} XP gagnés !`);
     } catch (e) {
       console.error("Failed to save session:", e);

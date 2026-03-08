@@ -21,13 +21,32 @@ export function useEvaluations() {
     queryKey: ["evaluations", user?.id],
     enabled: !!user,
     queryFn: async () => {
-      const { data, error } = await supabase
+      // Fetch own evaluations
+      const { data: own, error: ownErr } = await supabase
         .from("evaluations")
         .select("*")
         .eq("user_id", user!.id)
         .order("eval_date", { ascending: true });
-      if (error) throw error;
-      return data as Evaluation[];
+      if (ownErr) throw ownErr;
+
+      // Fetch class evaluations (from teachers)
+      const { data: classEvals } = await supabase
+        .from("evaluations")
+        .select("*")
+        .not("class_id", "is", null)
+        .neq("user_id", user!.id)
+        .order("eval_date", { ascending: true });
+
+      // Merge and deduplicate
+      const all = [...(own || []), ...(classEvals || [])];
+      const seen = new Set<string>();
+      const unique = all.filter(e => {
+        if (seen.has(e.id)) return false;
+        seen.add(e.id);
+        return true;
+      });
+      unique.sort((a, b) => a.eval_date.localeCompare(b.eval_date));
+      return unique as Evaluation[];
     },
   });
 
