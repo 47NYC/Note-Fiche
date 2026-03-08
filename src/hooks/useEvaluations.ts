@@ -11,6 +11,7 @@ export type Evaluation = {
   eval_date: string;
   color: string;
   created_at: string;
+  class_id?: string | null;
 };
 
 export function useEvaluations() {
