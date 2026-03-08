@@ -31,12 +31,12 @@ const JoinClass = () => {
       .eq("student_id", user.id)
       .maybeSingle();
 
-    if (membership) {
-      setMyClass((membership as any).classes);
+    if (membership && membership.classes) {
+      setMyClass(membership.classes);
       const { data: docs } = await supabase
         .from("documents")
         .select("*")
-        .eq("class_id", (membership as any).classes.id)
+        .eq("class_id", (membership.classes as any).id)
         .order("created_at", { ascending: false });
       setDocuments(docs || []);
     }
