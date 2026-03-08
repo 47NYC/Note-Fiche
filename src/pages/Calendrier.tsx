@@ -105,7 +105,7 @@ const CalendrierPage = () => {
           color: "primary",
           ...(shareWithClass && classId ? { class_id: classId } : {}),
         } as any);
-        });
+
         toast.success("Évaluation ajoutée");
       }
       setDialogOpen(false);
