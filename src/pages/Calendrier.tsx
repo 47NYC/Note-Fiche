@@ -22,19 +22,6 @@ import { useSubjects } from "@/hooks/useSubjects";
 import { toast } from "sonner";
 import { Skeleton } from "@/components/ui/skeleton";
 
-const SUBJECTS = [
-  { value: "Mathématiques", color: "bg-blue-500" },
-  { value: "Français", color: "bg-rose-500" },
-  { value: "Histoire-Géographie", color: "bg-amber-500" },
-  { value: "Physique-Chimie", color: "bg-emerald-500" },
-  { value: "SVT", color: "bg-green-500" },
-  { value: "Technologie", color: "bg-purple-500" },
-  { value: "Anglais", color: "bg-cyan-500" },
-  { value: "Autre", color: "bg-gray-500" },
-];
-
-const getSubjectColor = (subject: string) =>
-  SUBJECTS.find((s) => s.value === subject)?.color || "bg-primary";
 
 const CalendrierPage = () => {
   const { data: evaluations, isLoading, addEvaluation, updateEvaluation, deleteEvaluation } = useEvaluations();
