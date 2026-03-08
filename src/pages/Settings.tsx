@@ -207,6 +207,38 @@ const SettingsPage = () => {
           </CardContent>
         </Card>
 
+        {/* Theme */}
+        <Card>
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2 text-base">
+              <Sun className="w-5 h-5 text-primary" />
+              Apparence
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="grid grid-cols-3 gap-3">
+              {([
+                { value: "light", label: "Clair", icon: Sun },
+                { value: "dark", label: "Sombre", icon: Moon },
+                { value: "system", label: "Système", icon: Monitor },
+              ] as const).map((opt) => (
+                <button
+                  key={opt.value}
+                  onClick={() => setTheme(opt.value)}
+                  className={`flex flex-col items-center gap-2 p-4 rounded-xl border-2 transition-all ${
+                    theme === opt.value
+                      ? "border-primary bg-primary/5"
+                      : "border-border hover:border-primary/30"
+                  }`}
+                >
+                  <opt.icon className={`w-5 h-5 ${theme === opt.value ? "text-primary" : "text-muted-foreground"}`} />
+                  <span className="text-sm font-medium">{opt.label}</span>
+                </button>
+              ))}
+            </div>
+          </CardContent>
+        </Card>
+
         {/* Preferences */}
         <PreferencesForm />
 
