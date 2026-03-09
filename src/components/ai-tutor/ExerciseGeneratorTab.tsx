@@ -42,6 +42,7 @@ type Question = {
 
 export function ExerciseGeneratorTab() {
   const { subjectNames } = useSubjects();
+  const { isPro } = useProAccess();
   const [subject, setSubject] = useState("");
   const [topic, setTopic] = useState("");
   const [difficulty, setDifficulty] = useState("moyen");
@@ -52,6 +53,10 @@ export function ExerciseGeneratorTab() {
   const [showResults, setShowResults] = useState(false);
   const sessionSaved = useRef(false);
   const queryClient = useQueryClient();
+  const [dailyExerciseCount, setDailyExerciseCount] = useState(getExerciseDailyCount());
+
+  const exerciseRemaining = DAILY_EXERCISE_LIMIT - dailyExerciseCount;
+  const exerciseLimitReached = !isPro && exerciseRemaining <= 0;
   const generate = async () => {
     if (!subject) { toast.error("Choisis une matière"); return; }
     setLoading(true);
