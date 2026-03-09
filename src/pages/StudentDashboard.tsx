@@ -8,11 +8,17 @@ import { RecentQuizzes } from "@/components/dashboard/RecentQuizzes";
 import { useStudentStats } from "@/hooks/useStudentStats";
 import { useWeeklyActivity } from "@/hooks/useWeeklyActivity";
 import { useRecentQuizzes } from "@/hooks/useRecentQuizzes";
+import { useProAccess } from "@/hooks/useProAccess";
+import { Crown, ArrowRight } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { useNavigate } from "react-router-dom";
 
 const StudentDashboard = () => {
   const { data: stats, isLoading: statsLoading } = useStudentStats();
   const { data: weeklyData } = useWeeklyActivity();
   const { data: recentQuizzes } = useRecentQuizzes();
+  const { isPro } = useProAccess();
+  const navigate = useNavigate();
 
   return (
     <DashboardLayout>
