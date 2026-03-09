@@ -283,7 +283,7 @@ const Leaderboard = () => {
                         <AvatarFallback className={`text-xs font-bold ${
                           i < 3 ? "bg-gradient-to-br " + RANK_REWARDS[i].color + " text-white" : "bg-muted"
                         }`}>
-                          {entry.full_name[0] || "?"}
+                          {profileEmojis[entry.student_id] || entry.full_name[0] || "?"}
                         </AvatarFallback>
                       </Avatar>
                       <div className="flex-1 min-w-0">
