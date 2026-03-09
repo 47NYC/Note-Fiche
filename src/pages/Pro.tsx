@@ -2,12 +2,11 @@ import { DashboardLayout } from "@/components/DashboardLayout";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Crown, Brain, Zap, Smile, Shield, CheckCircle2, Sparkles, Users, Copy, Gift } from "lucide-react";
+import { Crown, Brain, Zap, Smile, Shield, CheckCircle2, Sparkles } from "lucide-react";
 import { useProAccess } from "@/hooks/useProAccess";
 import { ProBadge } from "@/components/ProGate";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { toast } from "sonner";
-import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
 import { motion } from "framer-motion";
 
@@ -32,13 +31,6 @@ const FEATURES = [
     description: "Personnalise ton avatar dans le classement avec un emoji unique.",
     free: "Avatar par défaut",
     pro: "Emoji personnalisé",
-  },
-  {
-    icon: Users,
-    title: "Parrainage",
-    description: "Invite tes amis avec ton code unique et partage les avantages Pro.",
-    free: "Non disponible",
-    pro: "Code de parrainage exclusif",
   },
   {
     icon: Shield,
@@ -80,53 +72,6 @@ const Pro = () => {
   const { user } = useAuth();
   const [code, setCode] = useState("");
   const [submitting, setSubmitting] = useState(false);
-  const [referralCode, setReferralCode] = useState<string | null>(null);
-  const [referralCount, setReferralCount] = useState(0);
-  const [loadingReferral, setLoadingReferral] = useState(false);
-
-  // Load or create referral code for Pro users
-  useEffect(() => {
-    if (!isPro || !user) return;
-
-    const loadReferral = async () => {
-      setLoadingReferral(true);
-      // Check if user has a referral code
-      const { data: existing } = await supabase
-        .from("referrals")
-        .select("referral_code, referred_user_id")
-        .eq("referrer_id", user.id);
-
-      if (existing && existing.length > 0) {
-        // Find the user's own referral code (where they are the referrer and no one used it yet for themselves)
-        const ownCode = existing.find((r) => !r.referred_user_id);
-        if (ownCode) {
-          setReferralCode(ownCode.referral_code);
-        } else {
-          // Create a new one
-          const { data: newCode } = await supabase
-            .from("referrals")
-            .insert({ referrer_id: user.id })
-            .select("referral_code")
-            .single();
-          if (newCode) setReferralCode(newCode.referral_code);
-        }
-        // Count successful referrals
-        const usedCount = existing.filter((r) => r.referred_user_id).length;
-        setReferralCount(usedCount);
-      } else {
-        // Create first referral code
-        const { data: newCode } = await supabase
-          .from("referrals")
-          .insert({ referrer_id: user.id })
-          .select("referral_code")
-          .single();
-        if (newCode) setReferralCode(newCode.referral_code);
-      }
-      setLoadingReferral(false);
-    };
-
-    loadReferral();
-  }, [isPro, user]);
 
   const handleActivate = async () => {
     setSubmitting(true);
@@ -137,13 +82,6 @@ const Pro = () => {
       setTimeout(() => window.location.reload(), 500);
     } else {
       toast.error("Code invalide");
-    }
-  };
-
-  const copyReferralCode = () => {
-    if (referralCode) {
-      navigator.clipboard.writeText(referralCode);
-      toast.success("Code copié !");
     }
   };
 
@@ -185,7 +123,7 @@ const Pro = () => {
 
         {/* Feature comparison */}
         <motion.div className="grid gap-4" variants={containerVariants}>
-          {FEATURES.map((f, index) => (
+          {FEATURES.map((f) => (
             <motion.div key={f.title} variants={itemVariants}>
               <Card className="overflow-hidden hover:shadow-lg transition-shadow duration-300">
                 <CardContent className="p-0">
@@ -223,46 +161,6 @@ const Pro = () => {
           ))}
         </motion.div>
 
-        {/* Referral section for Pro users */}
-        {isPro && (
-          <motion.div variants={itemVariants}>
-            <Card className="border-primary/30 bg-gradient-to-br from-primary/5 to-primary/10">
-              <CardContent className="p-6 space-y-4">
-                <div className="flex items-center gap-3">
-                  <div className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center">
-                    <Gift className="w-6 h-6 text-primary" />
-                  </div>
-                  <div>
-                    <h2 className="font-heading text-lg font-bold">Parraine tes amis</h2>
-                    <p className="text-sm text-muted-foreground">
-                      Partage ton code pour inviter tes amis à rejoindre NoteFiche Pro.
-                    </p>
-                  </div>
-                </div>
-
-                {loadingReferral ? (
-                  <div className="h-12 animate-pulse bg-muted rounded-lg" />
-                ) : (
-                  <div className="flex gap-2">
-                    <div className="flex-1 bg-background border rounded-lg px-4 py-3 font-mono text-lg font-bold tracking-wider text-center">
-                      {referralCode}
-                    </div>
-                    <Button onClick={copyReferralCode} variant="outline" size="icon" className="shrink-0">
-                      <Copy className="w-4 h-4" />
-                    </Button>
-                  </div>
-                )}
-
-                {referralCount > 0 && (
-                  <p className="text-sm text-center text-muted-foreground">
-                    🎉 Tu as parrainé <span className="font-bold text-foreground">{referralCount}</span> ami{referralCount > 1 ? "s" : ""} !
-                  </p>
-                )}
-              </CardContent>
-            </Card>
-          </motion.div>
-        )}
-
         {/* Activation */}
         {!isPro && (
           <motion.div variants={itemVariants}>
@@ -273,11 +171,11 @@ const Pro = () => {
                   Activer le mode Pro
                 </h2>
                 <p className="text-sm text-muted-foreground">
-                  Entre ton code d'accès ou un code de parrainage pour débloquer toutes les fonctionnalités Pro.
+                  Entre ton code d'accès pour débloquer toutes les fonctionnalités Pro.
                 </p>
                 <div className="flex gap-2 max-w-md mx-auto">
                   <Input
-                    placeholder="Code d'accès ou de parrainage"
+                    placeholder="Code d'accès"
                     value={code}
                     onChange={(e) => setCode(e.target.value)}
                     onKeyDown={(e) => e.key === "Enter" && handleActivate()}
