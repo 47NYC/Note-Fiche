@@ -119,10 +119,16 @@ const Leaderboard = () => {
     const ids = members.map((m) => m.student_id);
 
     const [profilesRes, sessionsRes, streaksRes] = await Promise.all([
-      supabase.from("profiles").select("user_id, full_name").in("user_id", ids),
+      supabase.from("profiles").select("user_id, full_name, emoji").in("user_id", ids),
       supabase.from("practice_sessions").select("user_id, points_earned, score").in("user_id", ids),
       supabase.from("streaks").select("user_id, current_streak").in("user_id", ids),
     ]);
+
+    // Build emoji map
+    const emojiMap: Record<string, string | null> = {};
+    profilesRes.data?.forEach(p => { emojiMap[p.user_id] = p.emoji; });
+    setProfileEmojis(emojiMap);
+    if (user) setMyEmoji(emojiMap[user.id] || null);
 
     const raw = ids.map((sid) => {
       const profile = profilesRes.data?.find((p) => p.user_id === sid);
