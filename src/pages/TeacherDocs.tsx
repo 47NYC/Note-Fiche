@@ -224,6 +224,18 @@ const TeacherDocs = () => {
                 Le document doit être partagé en mode "Tous ceux qui ont le lien"
               </p>
             </div>
+            <div>
+              <Label htmlFor="publishAt">Publication programmée (optionnel)</Label>
+              <Input
+                id="publishAt"
+                type="datetime-local"
+                value={publishAt}
+                onChange={(e) => setPublishAt(e.target.value)}
+              />
+              <p className="text-xs text-muted-foreground mt-1">
+                Laissez vide pour publier immédiatement
+              </p>
+            </div>
             <Button
               className="w-full"
               disabled={adding}

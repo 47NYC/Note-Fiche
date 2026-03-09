@@ -128,7 +128,7 @@ const Learn = () => {
                   0
                 );
 
-                return (
+                  return (
                   <Card
                     key={doc.id}
                     className="glass-card hover:shadow-md transition-all cursor-pointer"
@@ -154,6 +154,16 @@ const Learn = () => {
                           )}
                         </div>
                       </div>
+                      {totalQ > 0 && (
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          className="shrink-0"
+                          onClick={(e) => { e.stopPropagation(); setView({ type: "exam", doc }); }}
+                        >
+                          <Timer className="w-4 h-4 mr-1" /> Examen
+                        </Button>
+                      )}
                       <p className="text-xs text-muted-foreground shrink-0">
                         {new Date(doc.created_at).toLocaleDateString("fr-FR")}
                       </p>
