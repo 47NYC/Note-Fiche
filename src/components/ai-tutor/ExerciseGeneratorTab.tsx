@@ -10,6 +10,23 @@ import { supabase } from "@/integrations/supabase/client";
 import { useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 import { useSubjects } from "@/hooks/useSubjects";
+import { useProAccess } from "@/hooks/useProAccess";
+
+const DAILY_EXERCISE_LIMIT = 10;
+
+function getExerciseDailyKey(): string {
+  return `ai_exercise_count_${new Date().toISOString().slice(0, 10)}`;
+}
+
+function getExerciseDailyCount(): number {
+  return parseInt(localStorage.getItem(getExerciseDailyKey()) || "0", 10);
+}
+
+function incrementExerciseDailyCount(): void {
+  const key = getExerciseDailyKey();
+  localStorage.setItem(key, String(getExerciseDailyCount() + 1));
+}
+
 const DIFFICULTIES = [
   { value: "facile", label: "Facile" },
   { value: "moyen", label: "Moyen" },
