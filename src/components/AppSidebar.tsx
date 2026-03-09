@@ -31,15 +31,17 @@ import {
 } from "@/components/ui/sidebar";
 import { Button } from "@/components/ui/button";
 
-const studentItems = [
+interface NavItem { title: string; url: string; icon: any; pro?: boolean }
+
+const studentItems: NavItem[] = [
   { title: "Dashboard", url: "/dashboard", icon: LayoutDashboard },
-  { title: "Tuteur IA", url: "/ai-tutor", icon: Brain },
+  { title: "Tuteur IA", url: "/ai-tutor", icon: Brain, pro: true },
   { title: "Calendrier", url: "/calendrier", icon: CalendarDays },
-  { title: "Brevet Blanc", url: "/brevet-blanc", icon: GraduationCap },
+  { title: "Brevet Blanc", url: "/brevet-blanc", icon: GraduationCap, pro: true },
   { title: "Apprendre", url: "/learn", icon: BookOpen },
   { title: "Flashcards", url: "/flashcards", icon: Flame },
   { title: "Ma classe", url: "/my-class", icon: Users },
-  { title: "Classement", url: "/classement", icon: Crown },
+  { title: "Classement", url: "/classement", icon: Crown, pro: true },
   { title: "Profil", url: "/profil", icon: UserCircle },
   { title: "Paramètres", url: "/settings", icon: Settings },
 ];
