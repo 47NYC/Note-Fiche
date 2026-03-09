@@ -29,7 +29,7 @@ import {
 
 const SettingsPage = () => {
   const { user, signOut } = useAuth();
-  const { isPro, activate } = useProAccess();
+  const { isPro, activate, referralLink, referralsCount, expiresAt } = useProAccess();
   const [proCode, setProCode] = useState("");
   const { theme, setTheme } = useTheme();
   const queryClient = useQueryClient();
