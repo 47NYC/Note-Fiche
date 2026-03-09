@@ -10,6 +10,23 @@ import { supabase } from "@/integrations/supabase/client";
 import { useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 import { useSubjects } from "@/hooks/useSubjects";
+import { useProAccess } from "@/hooks/useProAccess";
+
+const DAILY_EXERCISE_LIMIT = 10;
+
+function getExerciseDailyKey(): string {
+  return `ai_exercise_count_${new Date().toISOString().slice(0, 10)}`;
+}
+
+function getExerciseDailyCount(): number {
+  return parseInt(localStorage.getItem(getExerciseDailyKey()) || "0", 10);
+}
+
+function incrementExerciseDailyCount(): void {
+  const key = getExerciseDailyKey();
+  localStorage.setItem(key, String(getExerciseDailyCount() + 1));
+}
+
 const DIFFICULTIES = [
   { value: "facile", label: "Facile" },
   { value: "moyen", label: "Moyen" },
@@ -25,6 +42,7 @@ type Question = {
 
 export function ExerciseGeneratorTab() {
   const { subjectNames } = useSubjects();
+  const { isPro } = useProAccess();
   const [subject, setSubject] = useState("");
   const [topic, setTopic] = useState("");
   const [difficulty, setDifficulty] = useState("moyen");
@@ -35,13 +53,26 @@ export function ExerciseGeneratorTab() {
   const [showResults, setShowResults] = useState(false);
   const sessionSaved = useRef(false);
   const queryClient = useQueryClient();
+  const [dailyExerciseCount, setDailyExerciseCount] = useState(getExerciseDailyCount());
+
+  const exerciseRemaining = DAILY_EXERCISE_LIMIT - dailyExerciseCount;
+  const exerciseLimitReached = !isPro && exerciseRemaining <= 0;
   const generate = async () => {
     if (!subject) { toast.error("Choisis une matière"); return; }
+    if (exerciseLimitReached) {
+      toast.error("Tu as atteint ta limite de 10 exercices par jour. Passe en Pro pour un accès illimité !");
+      return;
+    }
     setLoading(true);
     setQuestions([]);
     setAnswers({});
     setShowResults(false);
     sessionSaved.current = false;
+
+    if (!isPro) {
+      incrementExerciseDailyCount();
+      setDailyExerciseCount(getExerciseDailyCount());
+    }
 
     try {
       const { data, error } = await supabase.functions.invoke("ai-generate-exercises", {
@@ -100,6 +131,18 @@ export function ExerciseGeneratorTab() {
 
   return (
     <div className="space-y-6 p-4 overflow-y-auto max-h-[calc(100vh-220px)]">
+      {/* Daily limit banner for free users */}
+      {!isPro && (
+        <div className={`text-xs px-3 py-1.5 rounded-full text-center ${
+          exerciseRemaining <= 3 ? "bg-destructive/10 text-destructive" : "bg-muted text-muted-foreground"
+        }`}>
+          {exerciseLimitReached
+            ? "🚫 Limite atteinte (10/10) — Passe en Pro pour un accès illimité !"
+            : `🎯 ${exerciseRemaining} quiz restant${exerciseRemaining > 1 ? "s" : ""} aujourd'hui`}
+          {!exerciseLimitReached && exerciseRemaining <= 3 && " — Passe en Pro pour l'illimité !"}
+        </div>
+      )}
+
       {/* Config */}
       <Card>
         <CardHeader>
@@ -142,7 +185,7 @@ export function ExerciseGeneratorTab() {
               </Select>
             </div>
           </div>
-          <Button onClick={generate} disabled={loading || !subject} className="w-full">
+          <Button onClick={generate} disabled={loading || !subject || exerciseLimitReached} className="w-full">
             {loading ? <><Loader2 className="w-4 h-4 mr-2 animate-spin" /> Génération en cours...</> : <><Sparkles className="w-4 h-4 mr-2" /> Générer les exercices</>}
           </Button>
         </CardContent>

@@ -11,7 +11,7 @@ import { ProBadge } from "@/components/ProGate";
 type Msg = { role: "user" | "assistant"; content: string };
 
 const CHAT_URL = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/ai-tutor-chat`;
-const DAILY_LIMIT = 20;
+const DAILY_LIMIT = 10;
 
 function getDailyKey(): string {
   return `ai_chat_count_${new Date().toISOString().slice(0, 10)}`;
@@ -135,7 +135,7 @@ export function ChatTab() {
             remaining <= 5 ? "bg-destructive/10 text-destructive" : "bg-muted text-muted-foreground"
           }`}>
             {limitReached
-              ? "🚫 Limite atteinte (20/20) — Passe en Pro pour un accès illimité !"
+              ? "🚫 Limite atteinte (10/10) — Passe en Pro pour un accès illimité !"
               : `💬 ${remaining} question${remaining > 1 ? "s" : ""} restante${remaining > 1 ? "s" : ""} aujourd'hui`}
             {!limitReached && isPro === false && remaining <= 5 && " — Passe en Pro pour l'illimité !"}
           </div>
@@ -205,7 +205,7 @@ export function ChatTab() {
           value={input}
           onChange={(e) => setInput(e.target.value)}
           onKeyDown={(e) => e.key === "Enter" && !e.shiftKey && send()}
-          placeholder={limitReached ? "Limite atteinte — Passe en Pro" : "Pose ta question..."}
+          placeholder={limitReached ? "Limite atteinte (10/jour) — Passe en Pro" : "Pose ta question..."}
           disabled={isLoading || limitReached}
           className="flex-1"
         />
