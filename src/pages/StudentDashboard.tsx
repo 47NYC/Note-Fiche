@@ -9,16 +9,36 @@ import { useStudentStats } from "@/hooks/useStudentStats";
 import { useWeeklyActivity } from "@/hooks/useWeeklyActivity";
 import { useRecentQuizzes } from "@/hooks/useRecentQuizzes";
 import { useProAccess } from "@/hooks/useProAccess";
-import { Crown, ArrowRight } from "lucide-react";
+import { Crown, ArrowRight, Gift, Copy } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router-dom";
+import { toast } from "sonner";
+import { useState } from "react";
 
 const StudentDashboard = () => {
   const { data: stats, isLoading: statsLoading } = useStudentStats();
   const { data: weeklyData } = useWeeklyActivity();
   const { data: recentQuizzes } = useRecentQuizzes();
-  const { isPro } = useProAccess();
+  const { isPro, referralLink, referralsCount } = useProAccess();
   const navigate = useNavigate();
+  const [referralDismissed, setReferralDismissed] = useState(() =>
+    localStorage.getItem("referral_banner_dismissed") === "true"
+  );
+
+  const dismissReferral = () => {
+    setReferralDismissed(true);
+    localStorage.setItem("referral_banner_dismissed", "true");
+  };
+
+  const copyLink = async () => {
+    if (!referralLink) return;
+    try {
+      await navigator.clipboard.writeText(referralLink);
+      toast.success("Lien copié !");
+    } catch {
+      toast.error("Impossible de copier");
+    }
+  };
 
   return (
     <DashboardLayout>
@@ -28,6 +48,33 @@ const StudentDashboard = () => {
           totalXP={stats?.totalXP ?? 0}
           loading={statsLoading}
         />
+
+        {/* Referral gift banner */}
+        {!referralDismissed && referralLink && (
+          <div className="relative w-full rounded-xl bg-gradient-to-r from-violet-500/10 to-fuchsia-500/10 border border-violet-500/20 p-4 flex items-center gap-4">
+            <div className="w-12 h-12 rounded-full bg-gradient-to-br from-violet-400 to-fuchsia-500 flex items-center justify-center shrink-0">
+              <Gift className="w-6 h-6 text-white" />
+            </div>
+            <div className="flex-1 min-w-0">
+              <p className="font-heading font-semibold text-sm">🎁 Parraine quelqu'un et gagne une semaine de Pro !</p>
+              <p className="text-xs text-muted-foreground mt-0.5">
+                Partage ton lien, chaque inscription = +7 jours de Pro gratuit
+                {referralsCount > 0 && <> • <span className="font-medium text-foreground">{referralsCount}</span> parrainage(s)</>}
+              </p>
+            </div>
+            <Button size="sm" variant="secondary" className="shrink-0" onClick={copyLink}>
+              <Copy className="w-3.5 h-3.5 mr-1.5" />
+              Copier le lien
+            </Button>
+            <button
+              onClick={dismissReferral}
+              className="absolute top-2 right-2 text-muted-foreground hover:text-foreground text-xs"
+              aria-label="Fermer"
+            >
+              ✕
+            </button>
+          </div>
+        )}
 
         {!isPro && (
           <button
