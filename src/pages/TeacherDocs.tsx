@@ -94,6 +94,7 @@ const TeacherDocs = () => {
       file_path: "",
       folder: docSubject,
       google_doc_url: googleDocUrl,
+      published_at: publishAt ? new Date(publishAt).toISOString() : new Date().toISOString(),
     }).select().single();
 
     if (insertErr) {
