@@ -171,13 +171,41 @@ const Leaderboard = () => {
 
   return (
     <DashboardLayout>
-      <ProGate feature="Défis & Classements" description="Défis hebdomadaires entre élèves, classement de classe avec récompenses.">
       <div className="space-y-6 max-w-4xl">
-        <h1 className="text-3xl font-heading font-bold flex items-center gap-3">
-          <Trophy className="w-8 h-8 text-accent" />
-          Classement
-        </h1>
-        {className && <p className="text-muted-foreground -mt-4">{className}</p>}
+        <div className="flex items-center justify-between flex-wrap gap-3">
+          <div>
+            <h1 className="text-3xl font-heading font-bold flex items-center gap-3">
+              <Trophy className="w-8 h-8 text-accent" />
+              Classement
+            </h1>
+            {className && <p className="text-muted-foreground">{className}</p>}
+          </div>
+          {isPro && (
+            <Popover>
+              <PopoverTrigger asChild>
+                <Button variant="outline" size="sm" className="gap-2">
+                  <span className="text-lg">{myEmoji || "😀"}</span>
+                  Mon emoji <ProBadge />
+                </Button>
+              </PopoverTrigger>
+              <PopoverContent className="w-auto p-3">
+                <div className="grid grid-cols-5 gap-1">
+                  {EMOJI_OPTIONS.map(e => (
+                    <button
+                      key={e}
+                      className={`w-9 h-9 text-xl rounded-lg hover:bg-accent/20 transition-colors ${myEmoji === e ? "bg-primary/20 ring-2 ring-primary" : ""}`}
+                      onClick={async () => {
+                        if (!user) return;
+                        const { error } = await supabase.from("profiles").update({ emoji: e }).eq("user_id", user.id);
+                        if (!error) { setMyEmoji(e); setProfileEmojis(prev => ({ ...prev, [user.id]: e })); toast.success("Emoji mis à jour !"); }
+                      }}
+                    >{e}</button>
+                  ))}
+                </div>
+              </PopoverContent>
+            </Popover>
+          )}
+        </div>
 
         {loading ? (
           <div className="flex justify-center py-12">
