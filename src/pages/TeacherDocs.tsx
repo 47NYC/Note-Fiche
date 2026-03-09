@@ -32,6 +32,7 @@ const TeacherDocs = () => {
   const [docTitle, setDocTitle] = useState("");
   const [docSubject, setDocSubject] = useState("");
   const [googleDocUrl, setGoogleDocUrl] = useState("");
+  const [publishAt, setPublishAt] = useState("");
   const [newSubjectName, setNewSubjectName] = useState("");
   const [subjectDialogOpen, setSubjectDialogOpen] = useState(false);
 
