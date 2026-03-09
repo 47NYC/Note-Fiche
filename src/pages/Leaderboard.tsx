@@ -156,6 +156,7 @@ const Leaderboard = () => {
 
   return (
     <DashboardLayout>
+      <ProGate feature="Défis & Classements" description="Défis hebdomadaires entre élèves, classement de classe avec récompenses.">
       <div className="space-y-6 max-w-4xl">
         <h1 className="text-3xl font-heading font-bold flex items-center gap-3">
           <Trophy className="w-8 h-8 text-accent" />
