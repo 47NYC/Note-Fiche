@@ -135,7 +135,7 @@ export function ChatTab() {
             remaining <= 5 ? "bg-destructive/10 text-destructive" : "bg-muted text-muted-foreground"
           }`}>
             {limitReached
-              ? "🚫 Limite atteinte (20/20) — Passe en Pro pour un accès illimité !"
+              ? "🚫 Limite atteinte (10/10) — Passe en Pro pour un accès illimité !"
               : `💬 ${remaining} question${remaining > 1 ? "s" : ""} restante${remaining > 1 ? "s" : ""} aujourd'hui`}
             {!limitReached && isPro === false && remaining <= 5 && " — Passe en Pro pour l'illimité !"}
           </div>
