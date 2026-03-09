@@ -351,6 +351,11 @@ const TeacherDocs = () => {
                         <p className="text-xs text-muted-foreground">
                           {doc.folder && <span className="mr-2">{doc.folder}</span>}
                           {new Date(doc.created_at).toLocaleDateString("fr-FR")}
+                          {doc.published_at && new Date(doc.published_at) > new Date() && (
+                            <Badge variant="outline" className="ml-2 text-[10px]">
+                              📅 {new Date(doc.published_at).toLocaleDateString("fr-FR", { day: "numeric", month: "short", hour: "2-digit", minute: "2-digit" })}
+                            </Badge>
+                          )}
                         </p>
                       </div>
                       {!isProcessed && (
