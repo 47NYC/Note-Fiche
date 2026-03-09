@@ -64,7 +64,7 @@ export function AppSidebar() {
   const { state } = useSidebar();
   const collapsed = state === "collapsed";
   const { role, signOut, user } = useAuth();
-  const { isPro } = useProAccess();
+  const { isPro, expiresAt } = useProAccess();
   const location = useLocation();
 
   const items = role === "teacher" ? teacherItems : studentItems;
