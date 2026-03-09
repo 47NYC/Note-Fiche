@@ -340,6 +340,7 @@ const TeacherStudents = () => {
           </TabsContent>
         </Tabs>
       </div>
+      </ProGate>
     </DashboardLayout>
   );
 };

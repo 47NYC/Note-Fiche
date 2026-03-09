@@ -243,6 +243,42 @@ const SettingsPage = () => {
           </CardContent>
         </Card>
 
+        {/* Pro Access */}
+        <Card className={isPro ? "border-amber-500/30" : ""}>
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2 text-base">
+              <Crown className="w-5 h-5 text-amber-500" />
+              Accès Pro
+              {isPro && <ProBadge />}
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            {isPro ? (
+              <p className="text-sm text-muted-foreground">✅ Ton compte Pro est activé. Tu as accès à toutes les fonctionnalités.</p>
+            ) : (
+              <div className="flex gap-2">
+                <Input
+                  placeholder="Code d'accès Pro"
+                  value={proCode}
+                  onChange={e => setProCode(e.target.value)}
+                  onKeyDown={async e => {
+                    if (e.key === "Enter") {
+                      const ok = await activate(proCode.trim());
+                      if (ok) { toast.success("Pro activé !"); window.location.reload(); }
+                      else toast.error("Code invalide");
+                    }
+                  }}
+                />
+                <Button onClick={async () => {
+                  const ok = await activate(proCode.trim());
+                  if (ok) { toast.success("Pro activé !"); window.location.reload(); }
+                  else toast.error("Code invalide");
+                }}>Activer</Button>
+              </div>
+            )}
+          </CardContent>
+        </Card>
+
         {/* Preferences */}
         <PreferencesForm />
 

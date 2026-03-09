@@ -313,6 +313,7 @@ const Leaderboard = () => {
           </Tabs>
         )}
       </div>
+      </ProGate>
     </DashboardLayout>
   );
 };

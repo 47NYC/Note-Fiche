@@ -34,6 +34,7 @@ const AITutor = () => {
           <TabsContent value="exercises"><ExerciseGeneratorTab /></TabsContent>
         </Tabs>
       </div>
+      </ProGate>
     </DashboardLayout>
   );
 };
