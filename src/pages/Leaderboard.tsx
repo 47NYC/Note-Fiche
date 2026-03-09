@@ -74,11 +74,16 @@ function computeCompositeScores(entries: Omit<LeaderboardEntry, "compositeScore"
   }));
 }
 
+const EMOJI_OPTIONS = ["😎","🔥","⭐","🎯","🚀","💪","🧠","👑","🦁","🐺","🎓","💎","🌟","🏆","⚡","🎉","🦊","🐉","🎸","🌈"];
+
 const Leaderboard = () => {
   const { user } = useAuth();
+  const { isPro } = useProAccess();
   const [entries, setEntries] = useState<LeaderboardEntry[]>([]);
   const [loading, setLoading] = useState(true);
   const [className, setClassName] = useState("");
+  const [myEmoji, setMyEmoji] = useState<string | null>(null);
+  const [profileEmojis, setProfileEmojis] = useState<Record<string, string | null>>({});
 
   useEffect(() => {
     if (!user) return;
