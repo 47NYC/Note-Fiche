@@ -333,6 +333,27 @@ export type Database = {
         }
         Relationships: []
       }
+      pro_access: {
+        Row: {
+          activated_at: string
+          code_used: string
+          id: string
+          user_id: string
+        }
+        Insert: {
+          activated_at?: string
+          code_used: string
+          id?: string
+          user_id: string
+        }
+        Update: {
+          activated_at?: string
+          code_used?: string
+          id?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       profiles: {
         Row: {
           avatar_url: string | null
