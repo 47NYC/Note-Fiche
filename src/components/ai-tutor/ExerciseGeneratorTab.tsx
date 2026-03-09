@@ -131,6 +131,18 @@ export function ExerciseGeneratorTab() {
 
   return (
     <div className="space-y-6 p-4 overflow-y-auto max-h-[calc(100vh-220px)]">
+      {/* Daily limit banner for free users */}
+      {!isPro && (
+        <div className={`text-xs px-3 py-1.5 rounded-full text-center ${
+          exerciseRemaining <= 3 ? "bg-destructive/10 text-destructive" : "bg-muted text-muted-foreground"
+        }`}>
+          {exerciseLimitReached
+            ? "🚫 Limite atteinte (10/10) — Passe en Pro pour un accès illimité !"
+            : `🎯 ${exerciseRemaining} quiz restant${exerciseRemaining > 1 ? "s" : ""} aujourd'hui`}
+          {!exerciseLimitReached && exerciseRemaining <= 3 && " — Passe en Pro pour l'illimité !"}
+        </div>
+      )}
+
       {/* Config */}
       <Card>
         <CardHeader>
