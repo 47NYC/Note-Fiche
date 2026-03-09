@@ -6,7 +6,11 @@ import { supabase } from "@/integrations/supabase/client";
 import { Trophy, Crown, Medal, Flame, Star, Zap, Target, BookOpen, Calendar, Lock, Award } from "lucide-react";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { ProGate } from "@/components/ProGate";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import { Button } from "@/components/ui/button";
+import { useProAccess } from "@/hooks/useProAccess";
+import { ProBadge } from "@/components/ProGate";
+import { toast } from "sonner";
 
 const BADGE_DEFS = [
   { key: "first_lesson", name: "Première leçon", icon: BookOpen, check: (s: Stats) => s.totalQuizzes >= 1 },
