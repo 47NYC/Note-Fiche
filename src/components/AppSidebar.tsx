@@ -16,6 +16,7 @@ import {
 import { NavLink } from "@/components/NavLink";
 import { useLocation } from "react-router-dom";
 import { useAuth } from "@/hooks/useAuth";
+import { useProAccess } from "@/hooks/useProAccess";
 import {
   Sidebar,
   SidebarContent,
@@ -30,28 +31,30 @@ import {
 } from "@/components/ui/sidebar";
 import { Button } from "@/components/ui/button";
 
-const studentItems = [
+interface NavItem { title: string; url: string; icon: any; pro?: boolean }
+
+const studentItems: NavItem[] = [
   { title: "Dashboard", url: "/dashboard", icon: LayoutDashboard },
-  { title: "Tuteur IA", url: "/ai-tutor", icon: Brain },
+  { title: "Tuteur IA", url: "/ai-tutor", icon: Brain, pro: true },
   { title: "Calendrier", url: "/calendrier", icon: CalendarDays },
-  { title: "Brevet Blanc", url: "/brevet-blanc", icon: GraduationCap },
+  { title: "Brevet Blanc", url: "/brevet-blanc", icon: GraduationCap, pro: true },
   { title: "Apprendre", url: "/learn", icon: BookOpen },
   { title: "Flashcards", url: "/flashcards", icon: Flame },
   { title: "Ma classe", url: "/my-class", icon: Users },
-  { title: "Classement", url: "/classement", icon: Crown },
+  { title: "Classement", url: "/classement", icon: Crown, pro: true },
   { title: "Profil", url: "/profil", icon: UserCircle },
   { title: "Paramètres", url: "/settings", icon: Settings },
 ];
 
-const teacherItems = [
+const teacherItems: NavItem[] = [
   { title: "Dashboard", url: "/dashboard", icon: LayoutDashboard },
-  { title: "Tuteur IA", url: "/ai-tutor", icon: Brain },
+  { title: "Tuteur IA", url: "/ai-tutor", icon: Brain, pro: true },
   { title: "Calendrier", url: "/calendrier", icon: CalendarDays },
-  { title: "Brevet Blanc", url: "/brevet-blanc", icon: GraduationCap },
+  { title: "Brevet Blanc", url: "/brevet-blanc", icon: GraduationCap, pro: true },
   { title: "Apprendre", url: "/learn", icon: BookOpen },
   { title: "Ma classe", url: "/teacher-class", icon: Users },
   { title: "Documents", url: "/teacher-docs", icon: FileText },
-  { title: "Élèves", url: "/teacher-students", icon: Users },
+  { title: "Élèves", url: "/teacher-students", icon: Users, pro: true },
   { title: "Profil", url: "/profil", icon: UserCircle },
   { title: "Paramètres", url: "/settings", icon: Settings },
 ];
@@ -60,6 +63,7 @@ export function AppSidebar() {
   const { state } = useSidebar();
   const collapsed = state === "collapsed";
   const { role, signOut, user } = useAuth();
+  const { isPro } = useProAccess();
   const location = useLocation();
 
   const items = role === "teacher" ? teacherItems : studentItems;
@@ -90,7 +94,12 @@ export function AppSidebar() {
                       activeClassName="bg-sidebar-accent text-sidebar-accent-foreground font-medium"
                     >
                       <item.icon className="mr-2 h-4 w-4" />
-                      {!collapsed && <span>{item.title}</span>}
+                      {!collapsed && (
+                        <span className="flex-1">{item.title}</span>
+                      )}
+                      {!collapsed && item.pro && !isPro && (
+                        <span className="ml-auto text-[9px] font-bold px-1.5 py-0.5 rounded-full bg-amber-500/20 text-amber-600 dark:text-amber-400">PRO</span>
+                      )}
                     </NavLink>
                   </SidebarMenuButton>
                 </SidebarMenuItem>

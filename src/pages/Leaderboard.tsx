@@ -6,6 +6,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { Trophy, Crown, Medal, Flame, Star, Zap, Target, BookOpen, Calendar, Lock, Award } from "lucide-react";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { ProGate } from "@/components/ProGate";
 
 const BADGE_DEFS = [
   { key: "first_lesson", name: "Première leçon", icon: BookOpen, check: (s: Stats) => s.totalQuizzes >= 1 },
@@ -155,6 +156,7 @@ const Leaderboard = () => {
 
   return (
     <DashboardLayout>
+      <ProGate feature="Défis & Classements" description="Défis hebdomadaires entre élèves, classement de classe avec récompenses.">
       <div className="space-y-6 max-w-4xl">
         <h1 className="text-3xl font-heading font-bold flex items-center gap-3">
           <Trophy className="w-8 h-8 text-accent" />
@@ -311,6 +313,7 @@ const Leaderboard = () => {
           </Tabs>
         )}
       </div>
+      </ProGate>
     </DashboardLayout>
   );
 };

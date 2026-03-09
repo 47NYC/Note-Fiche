@@ -10,6 +10,9 @@ import { Users, BookOpen, Flame, Trophy, TrendingUp, ClipboardList, Calendar } f
 import { StudentProgressChart } from "@/components/teacher/StudentProgressChart";
 import { ExportCSV } from "@/components/teacher/ExportCSV";
 import { cn } from "@/lib/utils";
+import { ProGate } from "@/components/ProGate";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Input } from "@/components/ui/input";
 
 interface SessionPoint { date: string; xp: number; score: number }
 
@@ -146,8 +149,22 @@ const TeacherStudents = () => {
   const classAvgXP = students.length ? Math.round(students.reduce((s, st) => s + st.totalXP, 0) / students.length) : 0;
   const classAvgScore = students.length ? Math.round(students.reduce((s, st) => s + st.avgScore, 0) / students.length) : 0;
 
+  // Exam results filters
+  const [filterSubject, setFilterSubject] = useState<string>("all");
+  const [filterDateFrom, setFilterDateFrom] = useState("");
+  const [filterDateTo, setFilterDateTo] = useState("");
+
+  const examSubjects = [...new Set(examResults.map(r => r.subject).filter(Boolean))];
+  const filteredExams = examResults.filter(r => {
+    if (filterSubject !== "all" && r.subject !== filterSubject) return false;
+    if (filterDateFrom && new Date(r.started_at) < new Date(filterDateFrom)) return false;
+    if (filterDateTo && new Date(r.started_at) > new Date(filterDateTo + "T23:59:59")) return false;
+    return true;
+  });
+
   return (
     <DashboardLayout>
+      <ProGate feature="Tableau de bord analytique" description="Vue détaillée par élève : temps de travail, progression par chapitre, taux de réussite par compétence.">
       <div className="space-y-6 max-w-5xl">
         <div className="flex items-center justify-between">
           <h1 className="text-3xl font-heading font-bold flex items-center gap-3">
@@ -249,15 +266,43 @@ const TeacherStudents = () => {
                 </CardTitle>
               </CardHeader>
               <CardContent>
+                {/* Filters */}
+                <div className="flex flex-wrap gap-3 mb-4">
+                  <Select value={filterSubject} onValueChange={setFilterSubject}>
+                    <SelectTrigger className="w-[180px]">
+                      <SelectValue placeholder="Matière" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="all">Toutes les matières</SelectItem>
+                      {examSubjects.map(s => (
+                        <SelectItem key={s} value={s}>{s}</SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                  <Input
+                    type="date"
+                    value={filterDateFrom}
+                    onChange={e => setFilterDateFrom(e.target.value)}
+                    className="w-[160px]"
+                    placeholder="Du"
+                  />
+                  <Input
+                    type="date"
+                    value={filterDateTo}
+                    onChange={e => setFilterDateTo(e.target.value)}
+                    className="w-[160px]"
+                    placeholder="Au"
+                  />
+                </div>
                 {loading ? (
                   <div className="flex justify-center py-8">
                     <div className="w-6 h-6 rounded-full border-2 border-primary border-t-transparent animate-spin" />
                   </div>
-                ) : examResults.length === 0 ? (
-                  <p className="text-muted-foreground text-sm">Aucun examen passé pour le moment.</p>
+                ) : filteredExams.length === 0 ? (
+                  <p className="text-muted-foreground text-sm">Aucun examen trouvé pour ces filtres.</p>
                 ) : (
                   <div className="space-y-3">
-                    {examResults.map((r) => (
+                    {filteredExams.map((r) => (
                       <div key={r.id} className="p-4 rounded-xl bg-secondary/30 hover:bg-secondary/50 transition-colors">
                         <div className="flex items-center justify-between mb-2">
                           <div className="flex items-center gap-3">
@@ -295,6 +340,7 @@ const TeacherStudents = () => {
           </TabsContent>
         </Tabs>
       </div>
+      </ProGate>
     </DashboardLayout>
   );
 };

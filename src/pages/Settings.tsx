@@ -7,7 +7,9 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Switch } from "@/components/ui/switch";
-import { Settings, Trash2, AlertTriangle, Save, Camera, User, Sun, Moon, Monitor } from "lucide-react";
+import { Settings, Trash2, AlertTriangle, Save, Camera, User, Sun, Moon, Monitor, Crown } from "lucide-react";
+import { useProAccess } from "@/hooks/useProAccess";
+import { ProBadge } from "@/components/ProGate";
 import { useState, useEffect, useRef } from "react";
 import { useTheme } from "next-themes";
 import { supabase } from "@/integrations/supabase/client";
@@ -27,6 +29,8 @@ import {
 
 const SettingsPage = () => {
   const { user, signOut } = useAuth();
+  const { isPro, activate } = useProAccess();
+  const [proCode, setProCode] = useState("");
   const { theme, setTheme } = useTheme();
   const queryClient = useQueryClient();
   const [deleting, setDeleting] = useState(false);
@@ -236,6 +240,42 @@ const SettingsPage = () => {
                 </button>
               ))}
             </div>
+          </CardContent>
+        </Card>
+
+        {/* Pro Access */}
+        <Card className={isPro ? "border-amber-500/30" : ""}>
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2 text-base">
+              <Crown className="w-5 h-5 text-amber-500" />
+              Accès Pro
+              {isPro && <ProBadge />}
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            {isPro ? (
+              <p className="text-sm text-muted-foreground">✅ Ton compte Pro est activé. Tu as accès à toutes les fonctionnalités.</p>
+            ) : (
+              <div className="flex gap-2">
+                <Input
+                  placeholder="Code d'accès Pro"
+                  value={proCode}
+                  onChange={e => setProCode(e.target.value)}
+                  onKeyDown={async e => {
+                    if (e.key === "Enter") {
+                      const ok = await activate(proCode.trim());
+                      if (ok) { toast.success("Pro activé !"); window.location.reload(); }
+                      else toast.error("Code invalide");
+                    }
+                  }}
+                />
+                <Button onClick={async () => {
+                  const ok = await activate(proCode.trim());
+                  if (ok) { toast.success("Pro activé !"); window.location.reload(); }
+                  else toast.error("Code invalide");
+                }}>Activer</Button>
+              </div>
+            )}
           </CardContent>
         </Card>
 

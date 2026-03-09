@@ -18,6 +18,7 @@ import {
   Select, SelectContent, SelectItem, SelectTrigger, SelectValue,
 } from "@/components/ui/select";
 import { useSubjects } from "@/hooks/useSubjects";
+import { ProGate } from "@/components/ProGate";
 
 const BrevetBlanc = () => {
   const { subjectNames } = useSubjects();
@@ -118,6 +119,7 @@ const BrevetBlanc = () => {
 
   return (
     <DashboardLayout>
+      <ProGate feature="Mode examen chronométré" description="Simulations de brevet en conditions réelles avec timer, notation automatique et correction détaillée.">
       <div className="space-y-6 max-w-5xl">
         {/* Header */}
         <div className="flex items-center justify-between">
@@ -261,6 +263,7 @@ const BrevetBlanc = () => {
           </div>
         )}
       </div>
+      </ProGate>
     </DashboardLayout>
   );
 };
