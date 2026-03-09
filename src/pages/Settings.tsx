@@ -279,6 +279,46 @@ const SettingsPage = () => {
           </CardContent>
         </Card>
 
+        {/* Referral / Parrainage */}
+        {user && referralLink && (
+          <Card>
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2 text-base">
+                <Link className="w-5 h-5 text-primary" />
+                Parrainage
+              </CardTitle>
+              <CardDescription>
+                Partage ton lien : chaque inscription via ton lien = <span className="font-medium text-foreground">+7 jours</span> d'essai Pro
+              </CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-3">
+              <div className="flex gap-2">
+                <Input readOnly value={referralLink} className="font-mono text-xs" />
+                <Button
+                  variant="secondary"
+                  onClick={async () => {
+                    try {
+                      await navigator.clipboard.writeText(referralLink);
+                      toast.success("Lien copié !");
+                    } catch {
+                      toast.error("Impossible de copier");
+                    }
+                  }}
+                >
+                  <Copy className="w-4 h-4 mr-2" />
+                  Copier
+                </Button>
+              </div>
+              <p className="text-sm text-muted-foreground">
+                <span className="font-medium text-foreground">{referralsCount}</span> parrainage(s) validé(s)
+                {expiresAt && new Date(expiresAt) > new Date() && (
+                  <> • essai actif jusqu'au <span className="font-medium text-foreground">{new Date(expiresAt).toLocaleDateString()}</span></>
+                )}
+              </p>
+            </CardContent>
+          </Card>
+        )}
+
         {/* Preferences */}
         <PreferencesForm />
 

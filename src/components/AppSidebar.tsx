@@ -110,6 +110,13 @@ export function AppSidebar() {
         </SidebarGroup>
       </SidebarContent>
 
+      {/* Pro trial banner */}
+      {isPro && expiresAt && new Date(expiresAt) > new Date() && !collapsed && (
+        <div className="mx-3 mb-2 px-3 py-2 rounded-lg bg-amber-500/10 text-xs text-amber-600 dark:text-amber-400 font-medium text-center">
+          ⏳ Essai Pro : {Math.max(0, Math.ceil((new Date(expiresAt).getTime() - Date.now()) / 86400000))} jour(s) restant(s)
+        </div>
+      )}
+
       <SidebarFooter className="p-3">
         <Button
           variant="ghost"
