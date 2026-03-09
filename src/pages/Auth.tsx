@@ -190,6 +190,10 @@ const Auth = () => {
             </div>
           </CardContent>
         </Card>
+
+        <p className="text-center text-xs text-muted-foreground">
+          Created by 47NYC and 47NYC#2
+        </p>
       </div>
     </div>
   );
