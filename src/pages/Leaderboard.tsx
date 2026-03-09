@@ -6,7 +6,11 @@ import { supabase } from "@/integrations/supabase/client";
 import { Trophy, Crown, Medal, Flame, Star, Zap, Target, BookOpen, Calendar, Lock, Award } from "lucide-react";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { ProGate } from "@/components/ProGate";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import { Button } from "@/components/ui/button";
+import { useProAccess } from "@/hooks/useProAccess";
+import { ProBadge } from "@/components/ProGate";
+import { toast } from "sonner";
 
 const BADGE_DEFS = [
   { key: "first_lesson", name: "Première leçon", icon: BookOpen, check: (s: Stats) => s.totalQuizzes >= 1 },
@@ -70,11 +74,16 @@ function computeCompositeScores(entries: Omit<LeaderboardEntry, "compositeScore"
   }));
 }
 
+const EMOJI_OPTIONS = ["😎","🔥","⭐","🎯","🚀","💪","🧠","👑","🦁","🐺","🎓","💎","🌟","🏆","⚡","🎉","🦊","🐉","🎸","🌈"];
+
 const Leaderboard = () => {
   const { user } = useAuth();
+  const { isPro } = useProAccess();
   const [entries, setEntries] = useState<LeaderboardEntry[]>([]);
   const [loading, setLoading] = useState(true);
   const [className, setClassName] = useState("");
+  const [myEmoji, setMyEmoji] = useState<string | null>(null);
+  const [profileEmojis, setProfileEmojis] = useState<Record<string, string | null>>({});
 
   useEffect(() => {
     if (!user) return;
@@ -110,10 +119,16 @@ const Leaderboard = () => {
     const ids = members.map((m) => m.student_id);
 
     const [profilesRes, sessionsRes, streaksRes] = await Promise.all([
-      supabase.from("profiles").select("user_id, full_name").in("user_id", ids),
+      supabase.from("profiles").select("user_id, full_name, emoji").in("user_id", ids),
       supabase.from("practice_sessions").select("user_id, points_earned, score").in("user_id", ids),
       supabase.from("streaks").select("user_id, current_streak").in("user_id", ids),
     ]);
+
+    // Build emoji map
+    const emojiMap: Record<string, string | null> = {};
+    profilesRes.data?.forEach(p => { emojiMap[p.user_id] = p.emoji; });
+    setProfileEmojis(emojiMap);
+    if (user) setMyEmoji(emojiMap[user.id] || null);
 
     const raw = ids.map((sid) => {
       const profile = profilesRes.data?.find((p) => p.user_id === sid);
@@ -156,13 +171,41 @@ const Leaderboard = () => {
 
   return (
     <DashboardLayout>
-      <ProGate feature="Défis & Classements" description="Défis hebdomadaires entre élèves, classement de classe avec récompenses.">
       <div className="space-y-6 max-w-4xl">
-        <h1 className="text-3xl font-heading font-bold flex items-center gap-3">
-          <Trophy className="w-8 h-8 text-accent" />
-          Classement
-        </h1>
-        {className && <p className="text-muted-foreground -mt-4">{className}</p>}
+        <div className="flex items-center justify-between flex-wrap gap-3">
+          <div>
+            <h1 className="text-3xl font-heading font-bold flex items-center gap-3">
+              <Trophy className="w-8 h-8 text-accent" />
+              Classement
+            </h1>
+            {className && <p className="text-muted-foreground">{className}</p>}
+          </div>
+          {isPro && (
+            <Popover>
+              <PopoverTrigger asChild>
+                <Button variant="outline" size="sm" className="gap-2">
+                  <span className="text-lg">{myEmoji || "😀"}</span>
+                  Mon emoji <ProBadge />
+                </Button>
+              </PopoverTrigger>
+              <PopoverContent className="w-auto p-3">
+                <div className="grid grid-cols-5 gap-1">
+                  {EMOJI_OPTIONS.map(e => (
+                    <button
+                      key={e}
+                      className={`w-9 h-9 text-xl rounded-lg hover:bg-accent/20 transition-colors ${myEmoji === e ? "bg-primary/20 ring-2 ring-primary" : ""}`}
+                      onClick={async () => {
+                        if (!user) return;
+                        const { error } = await supabase.from("profiles").update({ emoji: e }).eq("user_id", user.id);
+                        if (!error) { setMyEmoji(e); setProfileEmojis(prev => ({ ...prev, [user.id]: e })); toast.success("Emoji mis à jour !"); }
+                      }}
+                    >{e}</button>
+                  ))}
+                </div>
+              </PopoverContent>
+            </Popover>
+          )}
+        </div>
 
         {loading ? (
           <div className="flex justify-center py-12">
@@ -240,7 +283,7 @@ const Leaderboard = () => {
                         <AvatarFallback className={`text-xs font-bold ${
                           i < 3 ? "bg-gradient-to-br " + RANK_REWARDS[i].color + " text-white" : "bg-muted"
                         }`}>
-                          {entry.full_name[0] || "?"}
+                          {profileEmojis[entry.student_id] || entry.full_name[0] || "?"}
                         </AvatarFallback>
                       </Avatar>
                       <div className="flex-1 min-w-0">
@@ -313,7 +356,6 @@ const Leaderboard = () => {
           </Tabs>
         )}
       </div>
-      </ProGate>
     </DashboardLayout>
   );
 };
