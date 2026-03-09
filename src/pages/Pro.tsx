@@ -68,7 +68,7 @@ const heroVariants = {
 };
 
 const Pro = () => {
-  const { isPro, activate } = useProAccess();
+  const { isPro, expiresAt, referralLink, referralsCount, activate } = useProAccess();
   const { user } = useAuth();
   const [code, setCode] = useState("");
   const [submitting, setSubmitting] = useState(false);
