@@ -185,7 +185,7 @@ export function ExerciseGeneratorTab() {
               </Select>
             </div>
           </div>
-          <Button onClick={generate} disabled={loading || !subject} className="w-full">
+          <Button onClick={generate} disabled={loading || !subject || exerciseLimitReached} className="w-full">
             {loading ? <><Loader2 className="w-4 h-4 mr-2 animate-spin" /> Génération en cours...</> : <><Sparkles className="w-4 h-4 mr-2" /> Générer les exercices</>}
           </Button>
         </CardContent>

@@ -205,7 +205,7 @@ export function ChatTab() {
           value={input}
           onChange={(e) => setInput(e.target.value)}
           onKeyDown={(e) => e.key === "Enter" && !e.shiftKey && send()}
-          placeholder={limitReached ? "Limite atteinte — Passe en Pro" : "Pose ta question..."}
+          placeholder={limitReached ? "Limite atteinte (10/jour) — Passe en Pro" : "Pose ta question..."}
           disabled={isLoading || limitReached}
           className="flex-1"
         />
