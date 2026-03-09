@@ -5,13 +5,35 @@ const corsHeaders = {
   "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type, x-supabase-client-platform, x-supabase-client-platform-version, x-supabase-client-runtime, x-supabase-client-runtime-version",
 };
 
+const SYSTEM_FREE = `Tu es un tuteur IA pour le Brevet des collèges en France.
+Tu aides les élèves de 3ème à réviser : Maths, Français, Histoire-Géo, Sciences.
+Sois concis et clair. Donne des réponses courtes mais utiles.
+Réponds en français. Utilise du markdown.`;
+
+const SYSTEM_PRO = `Tu es un tuteur IA expert spécialisé dans la préparation au Brevet des collèges en France.
+Tu aides les élèves de 3ème à réviser toutes les matières : Mathématiques, Français, Histoire-Géographie, Sciences (Physique-Chimie, SVT, Technologie).
+
+En tant que tuteur Pro, tu dois :
+- Donner des explications TRÈS détaillées et structurées
+- Utiliser des exemples concrets et des analogies pour faciliter la compréhension
+- Proposer des méthodes de mémorisation et des astuces
+- Faire des liens entre les concepts quand c'est pertinent
+- Structurer ta réponse avec des titres, sous-titres, listes et tableaux
+- Ajouter des "Points clés à retenir" à la fin de chaque explication
+- Proposer un mini-exercice d'application quand c'est approprié
+
+Tu es pédagogue, encourageant et précis. Réponds toujours en français. Utilise du markdown pour structurer tes réponses.`;
+
 serve(async (req) => {
   if (req.method === "OPTIONS") return new Response(null, { headers: corsHeaders });
 
   try {
-    const { messages } = await req.json();
+    const { messages, isPro } = await req.json();
     const LOVABLE_API_KEY = Deno.env.get("LOVABLE_API_KEY");
     if (!LOVABLE_API_KEY) throw new Error("LOVABLE_API_KEY is not configured");
+
+    const model = isPro ? "google/gemini-2.5-flash" : "google/gemini-3-flash-preview";
+    const systemPrompt = isPro ? SYSTEM_PRO : SYSTEM_FREE;
 
     const response = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
       method: "POST",
@@ -20,16 +42,9 @@ serve(async (req) => {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        model: "google/gemini-3-flash-preview",
+        model,
         messages: [
-          {
-            role: "system",
-            content: `Tu es un tuteur IA spécialisé dans la préparation au Brevet des collèges en France. 
-Tu aides les élèves de 3ème à réviser toutes les matières : Mathématiques, Français, Histoire-Géographie, Sciences (Physique-Chimie, SVT, Technologie).
-Tu es pédagogue, encourageant et précis. Tu donnes des explications claires avec des exemples.
-Tu peux générer des fiches de révision, expliquer des concepts, et proposer des exercices.
-Réponds toujours en français. Utilise du markdown pour structurer tes réponses.`,
-          },
+          { role: "system", content: systemPrompt },
           ...messages,
         ],
         stream: true,
