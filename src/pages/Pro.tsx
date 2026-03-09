@@ -169,7 +169,8 @@ const Pro = () => {
                 <div className="space-y-1">
                   <h2 className="font-heading text-xl font-bold">Parrainage</h2>
                   <p className="text-sm text-muted-foreground">
-                    Partage ce lien : chaque inscription via ton lien ajoute <span className="font-medium text-foreground">7 jours</span> d'essai Pro.
+                    Partage ce lien : chaque inscription via ton lien ajoute{" "}
+                    <span className="font-medium text-foreground">7 jours</span> d'essai Pro.
                   </p>
                 </div>
 
@@ -197,14 +198,15 @@ const Pro = () => {
                   <span className="font-medium text-foreground">{referralsCount}</span> parrainage(s) validé(s)
                   {expiresAt && new Date(expiresAt) > new Date() ? (
                     <>
-                      {" "}• essai actif jusqu'au <span className="font-medium text-foreground">{new Date(expiresAt).toLocaleDateString()}</span>
+                      {" "}• essai actif jusqu'au{" "}
+                      <span className="font-medium text-foreground">{new Date(expiresAt).toLocaleDateString()}</span>
                     </>
                   ) : null}
                 </div>
               </CardContent>
             </Card>
           </motion.div>
-        )
+        )}
 
         {/* Activation */}
         {!isPro && (
