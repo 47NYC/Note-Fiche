@@ -106,6 +106,7 @@ const TeacherDocs = () => {
     setDocTitle("");
     setDocSubject("");
     setGoogleDocUrl("");
+    setPublishAt("");
     await loadData();
     setAdding(false);
     toast({ title: "Document ajouté !" });
