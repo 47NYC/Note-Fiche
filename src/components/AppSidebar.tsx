@@ -94,7 +94,12 @@ export function AppSidebar() {
                       activeClassName="bg-sidebar-accent text-sidebar-accent-foreground font-medium"
                     >
                       <item.icon className="mr-2 h-4 w-4" />
-                      {!collapsed && <span>{item.title}</span>}
+                      {!collapsed && (
+                        <span className="flex-1">{item.title}</span>
+                      )}
+                      {!collapsed && item.pro && !isPro && (
+                        <span className="ml-auto text-[9px] font-bold px-1.5 py-0.5 rounded-full bg-amber-500/20 text-amber-600 dark:text-amber-400">PRO</span>
+                      )}
                     </NavLink>
                   </SidebarMenuButton>
                 </SidebarMenuItem>
