@@ -9,7 +9,13 @@ interface AuthContextType {
   session: Session | null;
   role: UserRole;
   loading: boolean;
-  signUp: (email: string, password: string, fullName: string, role: "student" | "teacher") => Promise<void>;
+  signUp: (
+    email: string,
+    password: string,
+    fullName: string,
+    role: "student" | "teacher",
+    referralCode?: string
+  ) => Promise<void>;
   signIn: (email: string, password: string) => Promise<void>;
   signOut: () => Promise<void>;
 }
