@@ -263,7 +263,7 @@ const BrevetBlanc = () => {
           </div>
         )}
       </div>
-      </ProGate>
+      
     </DashboardLayout>
   );
 };

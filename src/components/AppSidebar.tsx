@@ -50,7 +50,7 @@ const teacherItems: NavItem[] = [
   { title: "Dashboard", url: "/dashboard", icon: LayoutDashboard },
   { title: "Tuteur IA", url: "/ai-tutor", icon: Brain, pro: true },
   { title: "Calendrier", url: "/calendrier", icon: CalendarDays },
-  { title: "Brevet Blanc", url: "/brevet-blanc", icon: GraduationCap, pro: true },
+  { title: "Brevet Blanc", url: "/brevet-blanc", icon: GraduationCap },
   { title: "Apprendre", url: "/learn", icon: BookOpen },
   { title: "Ma classe", url: "/teacher-class", icon: Users },
   { title: "Documents", url: "/teacher-docs", icon: FileText },
