@@ -112,6 +112,14 @@ export function useProAccess() {
 
     setIsPro(true);
     setExpiresAt(null);
+
+    // Reward the person who referred this user (+30 days)
+    try {
+      await supabase.rpc("reward_referrer_upgrade", { _referred_user_id: user.id });
+    } catch {
+      // Non-blocking
+    }
+
     return true;
   };
 

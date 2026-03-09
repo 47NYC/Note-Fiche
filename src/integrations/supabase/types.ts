@@ -592,6 +592,10 @@ export type Database = {
         Args: { _referral_code: string; _referred_user_id: string }
         Returns: undefined
       }
+      reward_referrer_upgrade: {
+        Args: { _referred_user_id: string }
+        Returns: undefined
+      }
     }
     Enums: {
       app_role: "student" | "teacher"
