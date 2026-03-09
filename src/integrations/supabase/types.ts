@@ -129,6 +129,7 @@ export type Database = {
           google_doc_url: string | null
           id: string
           is_brevet_blanc: boolean
+          published_at: string | null
           teacher_id: string
           title: string
         }
@@ -140,6 +141,7 @@ export type Database = {
           google_doc_url?: string | null
           id?: string
           is_brevet_blanc?: boolean
+          published_at?: string | null
           teacher_id: string
           title: string
         }
@@ -151,6 +153,7 @@ export type Database = {
           google_doc_url?: string | null
           id?: string
           is_brevet_blanc?: boolean
+          published_at?: string | null
           teacher_id?: string
           title?: string
         }
