@@ -11,7 +11,7 @@ import { ProBadge } from "@/components/ProGate";
 type Msg = { role: "user" | "assistant"; content: string };
 
 const CHAT_URL = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/ai-tutor-chat`;
-const DAILY_LIMIT = 20;
+const DAILY_LIMIT = 10;
 
 function getDailyKey(): string {
   return `ai_chat_count_${new Date().toISOString().slice(0, 10)}`;
