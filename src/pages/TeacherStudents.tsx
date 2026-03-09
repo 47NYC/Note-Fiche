@@ -298,11 +298,11 @@ const TeacherStudents = () => {
                   <div className="flex justify-center py-8">
                     <div className="w-6 h-6 rounded-full border-2 border-primary border-t-transparent animate-spin" />
                   </div>
-                ) : examResults.length === 0 ? (
-                  <p className="text-muted-foreground text-sm">Aucun examen passé pour le moment.</p>
+                ) : filteredExams.length === 0 ? (
+                  <p className="text-muted-foreground text-sm">Aucun examen trouvé pour ces filtres.</p>
                 ) : (
                   <div className="space-y-3">
-                    {examResults.map((r) => (
+                    {filteredExams.map((r) => (
                       <div key={r.id} className="p-4 rounded-xl bg-secondary/30 hover:bg-secondary/50 transition-colors">
                         <div className="flex items-center justify-between mb-2">
                           <div className="flex items-center gap-3">
