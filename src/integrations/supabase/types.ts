@@ -337,18 +337,21 @@ export type Database = {
         Row: {
           activated_at: string
           code_used: string
+          expires_at: string | null
           id: string
           user_id: string
         }
         Insert: {
           activated_at?: string
           code_used: string
+          expires_at?: string | null
           id?: string
           user_id: string
         }
         Update: {
           activated_at?: string
           code_used?: string
+          expires_at?: string | null
           id?: string
           user_id?: string
         }
@@ -584,6 +587,10 @@ export type Database = {
       is_class_teacher: {
         Args: { _class_id: string; _user_id: string }
         Returns: boolean
+      }
+      reward_referrer: {
+        Args: { _referral_code: string; _referred_user_id: string }
+        Returns: undefined
       }
     }
     Enums: {
