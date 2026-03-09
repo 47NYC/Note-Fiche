@@ -29,6 +29,22 @@ const StudentDashboard = () => {
           loading={statsLoading}
         />
 
+        {!isPro && (
+          <button
+            onClick={() => navigate("/pro")}
+            className="w-full rounded-xl bg-gradient-to-r from-amber-500/10 to-orange-500/10 border border-amber-500/20 p-4 flex items-center gap-3 hover:from-amber-500/15 hover:to-orange-500/15 transition-colors"
+          >
+            <div className="w-10 h-10 rounded-full bg-gradient-to-br from-amber-400 to-orange-500 flex items-center justify-center shrink-0">
+              <Crown className="w-5 h-5 text-white" />
+            </div>
+            <div className="flex-1 text-left">
+              <p className="font-heading font-semibold text-sm">Passe en Pro</p>
+              <p className="text-xs text-muted-foreground">IA avancée, exercices illimités, emoji de profil...</p>
+            </div>
+            <ArrowRight className="w-4 h-4 text-amber-500 shrink-0" />
+          </button>
+        )}
+
         <StatsCards
           totalXP={stats?.totalXP ?? 0}
           weeklyXP={stats?.weeklyXP ?? 0}

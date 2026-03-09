@@ -42,6 +42,7 @@ const studentItems: NavItem[] = [
   { title: "Flashcards", url: "/flashcards", icon: Flame },
   { title: "Ma classe", url: "/my-class", icon: Users },
   { title: "Classement", url: "/classement", icon: Crown },
+  { title: "Pro", url: "/pro", icon: Trophy, pro: true },
   { title: "Profil", url: "/profil", icon: UserCircle },
   { title: "Paramètres", url: "/settings", icon: Settings },
 ];
