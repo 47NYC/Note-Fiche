@@ -18,6 +18,7 @@ import {
   Select, SelectContent, SelectItem, SelectTrigger, SelectValue,
 } from "@/components/ui/select";
 import { useSubjects } from "@/hooks/useSubjects";
+import { ProGate } from "@/components/ProGate";
 
 const BrevetBlanc = () => {
   const { subjectNames } = useSubjects();
