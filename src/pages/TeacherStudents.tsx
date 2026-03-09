@@ -266,6 +266,34 @@ const TeacherStudents = () => {
                 </CardTitle>
               </CardHeader>
               <CardContent>
+                {/* Filters */}
+                <div className="flex flex-wrap gap-3 mb-4">
+                  <Select value={filterSubject} onValueChange={setFilterSubject}>
+                    <SelectTrigger className="w-[180px]">
+                      <SelectValue placeholder="Matière" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="all">Toutes les matières</SelectItem>
+                      {examSubjects.map(s => (
+                        <SelectItem key={s} value={s}>{s}</SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                  <Input
+                    type="date"
+                    value={filterDateFrom}
+                    onChange={e => setFilterDateFrom(e.target.value)}
+                    className="w-[160px]"
+                    placeholder="Du"
+                  />
+                  <Input
+                    type="date"
+                    value={filterDateTo}
+                    onChange={e => setFilterDateTo(e.target.value)}
+                    className="w-[160px]"
+                    placeholder="Au"
+                  />
+                </div>
                 {loading ? (
                   <div className="flex justify-center py-8">
                     <div className="w-6 h-6 rounded-full border-2 border-primary border-t-transparent animate-spin" />
