@@ -46,15 +46,15 @@ const studentItems: NavItem[] = [
   { title: "Paramètres", url: "/settings", icon: Settings },
 ];
 
-const teacherItems = [
+const teacherItems: NavItem[] = [
   { title: "Dashboard", url: "/dashboard", icon: LayoutDashboard },
-  { title: "Tuteur IA", url: "/ai-tutor", icon: Brain },
+  { title: "Tuteur IA", url: "/ai-tutor", icon: Brain, pro: true },
   { title: "Calendrier", url: "/calendrier", icon: CalendarDays },
-  { title: "Brevet Blanc", url: "/brevet-blanc", icon: GraduationCap },
+  { title: "Brevet Blanc", url: "/brevet-blanc", icon: GraduationCap, pro: true },
   { title: "Apprendre", url: "/learn", icon: BookOpen },
   { title: "Ma classe", url: "/teacher-class", icon: Users },
   { title: "Documents", url: "/teacher-docs", icon: FileText },
-  { title: "Élèves", url: "/teacher-students", icon: Users },
+  { title: "Élèves", url: "/teacher-students", icon: Users, pro: true },
   { title: "Profil", url: "/profil", icon: UserCircle },
   { title: "Paramètres", url: "/settings", icon: Settings },
 ];
