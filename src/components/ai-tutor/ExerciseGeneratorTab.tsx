@@ -59,11 +59,20 @@ export function ExerciseGeneratorTab() {
   const exerciseLimitReached = !isPro && exerciseRemaining <= 0;
   const generate = async () => {
     if (!subject) { toast.error("Choisis une matière"); return; }
+    if (exerciseLimitReached) {
+      toast.error("Tu as atteint ta limite de 10 exercices par jour. Passe en Pro pour un accès illimité !");
+      return;
+    }
     setLoading(true);
     setQuestions([]);
     setAnswers({});
     setShowResults(false);
     sessionSaved.current = false;
+
+    if (!isPro) {
+      incrementExerciseDailyCount();
+      setDailyExerciseCount(getExerciseDailyCount());
+    }
 
     try {
       const { data, error } = await supabase.functions.invoke("ai-generate-exercises", {
