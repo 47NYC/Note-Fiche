@@ -29,6 +29,8 @@ import {
 
 const SettingsPage = () => {
   const { user, signOut } = useAuth();
+  const { isPro, activate } = useProAccess();
+  const [proCode, setProCode] = useState("");
   const { theme, setTheme } = useTheme();
   const queryClient = useQueryClient();
   const [deleting, setDeleting] = useState(false);
