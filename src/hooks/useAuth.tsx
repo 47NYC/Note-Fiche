@@ -9,7 +9,13 @@ interface AuthContextType {
   session: Session | null;
   role: UserRole;
   loading: boolean;
-  signUp: (email: string, password: string, fullName: string, role: "student" | "teacher") => Promise<void>;
+  signUp: (
+    email: string,
+    password: string,
+    fullName: string,
+    role: "student" | "teacher",
+    referralCode?: string
+  ) => Promise<void>;
   signIn: (email: string, password: string) => Promise<void>;
   signOut: () => Promise<void>;
 }
@@ -57,7 +63,13 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     return () => subscription.unsubscribe();
   }, []);
 
-  const signUp = async (email: string, password: string, fullName: string, selectedRole: "student" | "teacher") => {
+  const signUp = async (
+    email: string,
+    password: string,
+    fullName: string,
+    selectedRole: "student" | "teacher",
+    referralCode?: string
+  ) => {
     const { data, error } = await supabase.auth.signUp({
       email,
       password,
@@ -67,6 +79,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       },
     });
     if (error) throw error;
+
     if (data.user) {
       await supabase.from("user_roles").insert({ user_id: data.user.id, role: selectedRole });
       setRole(selectedRole);
@@ -77,6 +90,18 @@ export function AuthProvider({ children }: { children: ReactNode }) {
           teacher_id: data.user.id,
           name: `Classe de ${fullName}`,
         });
+      }
+
+      // Referral reward: +7 jours d'essai Pro pour le parrain
+      if (referralCode) {
+        try {
+          await supabase.rpc("reward_referrer", {
+            _referral_code: referralCode,
+            _referred_user_id: data.user.id,
+          });
+        } catch {
+          // Ne bloque jamais l'inscription si le code est invalide
+        }
       }
     }
   };

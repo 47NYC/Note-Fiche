@@ -20,6 +20,7 @@ const Auth = () => {
   const { signIn, signUp } = useAuth();
   const navigate = useNavigate();
   const { toast } = useToast();
+  const referralCode = new URLSearchParams(window.location.search).get("ref") ?? undefined;
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -36,7 +37,7 @@ const Auth = () => {
         await signIn(email, password);
         navigate("/dashboard");
       } else {
-        await signUp(email, password, fullName, selectedRole);
+        await signUp(email, password, fullName, selectedRole, referralCode);
         navigate("/dashboard");
       }
     } catch (err: any) {
