@@ -2,7 +2,7 @@ import { DashboardLayout } from "@/components/DashboardLayout";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Crown, Brain, Zap, Smile, Shield, CheckCircle2, Sparkles } from "lucide-react";
+import { Crown, Brain, Zap, Smile, Shield, CheckCircle2, Sparkles, Copy } from "lucide-react";
 import { useProAccess } from "@/hooks/useProAccess";
 import { ProBadge } from "@/components/ProGate";
 import { useState } from "react";
