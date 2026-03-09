@@ -49,6 +49,25 @@ const Learn = () => {
     s.name.toLowerCase().includes(search.toLowerCase())
   );
 
+  // View: exam mode
+  if (view.type === "exam") {
+    const chapters = view.doc.content?.chapters || [];
+    const allQuestions = chapters.flatMap((ch: any) =>
+      (ch.questions || []).map((q: any) => ({ ...q, chapterTitle: ch.title }))
+    );
+    return (
+      <DashboardLayout>
+        <ExamMode
+          title={view.doc.title}
+          subject={view.doc.subject}
+          questions={allQuestions}
+          documentId={view.doc.id}
+          onExit={() => setView({ type: "subject", name: view.doc.subject })}
+        />
+      </DashboardLayout>
+    );
+  }
+
   // View: structured document
   if (view.type === "doc") {
     return (
