@@ -37,7 +37,7 @@ const Auth = () => {
         await signIn(email, password);
         navigate("/dashboard");
       } else {
-        await signUp(email, password, fullName, selectedRole);
+        await signUp(email, password, fullName, selectedRole, referralCode);
         navigate("/dashboard");
       }
     } catch (err: any) {

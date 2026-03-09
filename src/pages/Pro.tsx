@@ -161,6 +161,51 @@ const Pro = () => {
           ))}
         </motion.div>
 
+        {/* Parrainage (+7 jours par inscription) */}
+        {user && referralLink && (
+          <motion.div variants={itemVariants}>
+            <Card>
+              <CardContent className="p-6 space-y-4">
+                <div className="space-y-1">
+                  <h2 className="font-heading text-xl font-bold">Parrainage</h2>
+                  <p className="text-sm text-muted-foreground">
+                    Partage ce lien : chaque inscription via ton lien ajoute <span className="font-medium text-foreground">7 jours</span> d'essai Pro.
+                  </p>
+                </div>
+
+                <div className="flex flex-col sm:flex-row gap-2">
+                  <Input readOnly value={referralLink} className="font-mono text-xs" />
+                  <Button
+                    type="button"
+                    variant="secondary"
+                    onClick={async () => {
+                      try {
+                        await navigator.clipboard.writeText(referralLink);
+                        toast.success("Lien copié");
+                      } catch {
+                        toast.error("Impossible de copier le lien");
+                      }
+                    }}
+                    className="shrink-0"
+                  >
+                    <Copy className="w-4 h-4 mr-2" />
+                    Copier
+                  </Button>
+                </div>
+
+                <div className="text-sm text-muted-foreground">
+                  <span className="font-medium text-foreground">{referralsCount}</span> parrainage(s) validé(s)
+                  {expiresAt && new Date(expiresAt) > new Date() ? (
+                    <>
+                      {" "}• essai actif jusqu'au <span className="font-medium text-foreground">{new Date(expiresAt).toLocaleDateString()}</span>
+                    </>
+                  ) : null}
+                </div>
+              </CardContent>
+            </Card>
+          </motion.div>
+        )
+
         {/* Activation */}
         {!isPro && (
           <motion.div variants={itemVariants}>
