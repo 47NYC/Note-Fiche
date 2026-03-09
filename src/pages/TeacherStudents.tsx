@@ -10,6 +10,9 @@ import { Users, BookOpen, Flame, Trophy, TrendingUp, ClipboardList, Calendar } f
 import { StudentProgressChart } from "@/components/teacher/StudentProgressChart";
 import { ExportCSV } from "@/components/teacher/ExportCSV";
 import { cn } from "@/lib/utils";
+import { ProGate } from "@/components/ProGate";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Input } from "@/components/ui/input";
 
 interface SessionPoint { date: string; xp: number; score: number }
 
