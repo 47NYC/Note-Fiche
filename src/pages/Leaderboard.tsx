@@ -6,6 +6,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { Trophy, Crown, Medal, Flame, Star, Zap, Target, BookOpen, Calendar, Lock, Award } from "lucide-react";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { ProGate } from "@/components/ProGate";
 
 const BADGE_DEFS = [
   { key: "first_lesson", name: "Première leçon", icon: BookOpen, check: (s: Stats) => s.totalQuizzes >= 1 },
