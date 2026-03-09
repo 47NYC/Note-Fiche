@@ -149,8 +149,22 @@ const TeacherStudents = () => {
   const classAvgXP = students.length ? Math.round(students.reduce((s, st) => s + st.totalXP, 0) / students.length) : 0;
   const classAvgScore = students.length ? Math.round(students.reduce((s, st) => s + st.avgScore, 0) / students.length) : 0;
 
+  // Exam results filters
+  const [filterSubject, setFilterSubject] = useState<string>("all");
+  const [filterDateFrom, setFilterDateFrom] = useState("");
+  const [filterDateTo, setFilterDateTo] = useState("");
+
+  const examSubjects = [...new Set(examResults.map(r => r.subject).filter(Boolean))];
+  const filteredExams = examResults.filter(r => {
+    if (filterSubject !== "all" && r.subject !== filterSubject) return false;
+    if (filterDateFrom && new Date(r.started_at) < new Date(filterDateFrom)) return false;
+    if (filterDateTo && new Date(r.started_at) > new Date(filterDateTo + "T23:59:59")) return false;
+    return true;
+  });
+
   return (
     <DashboardLayout>
+      <ProGate feature="Tableau de bord analytique" description="Vue détaillée par élève : temps de travail, progression par chapitre, taux de réussite par compétence.">
       <div className="space-y-6 max-w-5xl">
         <div className="flex items-center justify-between">
           <h1 className="text-3xl font-heading font-bold flex items-center gap-3">
