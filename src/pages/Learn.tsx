@@ -2,10 +2,11 @@ import { DashboardLayout } from "@/components/DashboardLayout";
 import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { Search, BookOpen, ArrowLeft, Brain } from "lucide-react";
+import { Search, BookOpen, ArrowLeft, Brain, Timer } from "lucide-react";
 import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import StructuredDocViewer from "@/components/learn/StructuredDocViewer";
+import ExamMode from "@/components/learn/ExamMode";
 import { Badge } from "@/components/ui/badge";
 import { useSubjects } from "@/hooks/useSubjects";
 import { cn } from "@/lib/utils";
@@ -13,7 +14,8 @@ import { cn } from "@/lib/utils";
 type ViewState =
   | { type: "grid" }
   | { type: "subject"; name: string }
-  | { type: "doc"; doc: any };
+  | { type: "doc"; doc: any }
+  | { type: "exam"; doc: any };
 
 const Learn = () => {
   const { subjects, getColor } = useSubjects();
@@ -46,6 +48,25 @@ const Learn = () => {
   const filtered = subjects.filter((s) =>
     s.name.toLowerCase().includes(search.toLowerCase())
   );
+
+  // View: exam mode
+  if (view.type === "exam") {
+    const chapters = view.doc.content?.chapters || [];
+    const allQuestions = chapters.flatMap((ch: any) =>
+      (ch.questions || []).map((q: any) => ({ ...q, chapterTitle: ch.title }))
+    );
+    return (
+      <DashboardLayout>
+        <ExamMode
+          title={view.doc.title}
+          subject={view.doc.subject}
+          questions={allQuestions}
+          documentId={view.doc.id}
+          onExit={() => setView({ type: "subject", name: view.doc.subject })}
+        />
+      </DashboardLayout>
+    );
+  }
 
   // View: structured document
   if (view.type === "doc") {
@@ -107,7 +128,7 @@ const Learn = () => {
                   0
                 );
 
-                return (
+                  return (
                   <Card
                     key={doc.id}
                     className="glass-card hover:shadow-md transition-all cursor-pointer"
@@ -133,6 +154,16 @@ const Learn = () => {
                           )}
                         </div>
                       </div>
+                      {totalQ > 0 && (
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          className="shrink-0"
+                          onClick={(e) => { e.stopPropagation(); setView({ type: "exam", doc }); }}
+                        >
+                          <Timer className="w-4 h-4 mr-1" /> Examen
+                        </Button>
+                      )}
                       <p className="text-xs text-muted-foreground shrink-0">
                         {new Date(doc.created_at).toLocaleDateString("fr-FR")}
                       </p>

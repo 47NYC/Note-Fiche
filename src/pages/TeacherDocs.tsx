@@ -32,6 +32,7 @@ const TeacherDocs = () => {
   const [docTitle, setDocTitle] = useState("");
   const [docSubject, setDocSubject] = useState("");
   const [googleDocUrl, setGoogleDocUrl] = useState("");
+  const [publishAt, setPublishAt] = useState("");
   const [newSubjectName, setNewSubjectName] = useState("");
   const [subjectDialogOpen, setSubjectDialogOpen] = useState(false);
 
@@ -93,6 +94,7 @@ const TeacherDocs = () => {
       file_path: "",
       folder: docSubject,
       google_doc_url: googleDocUrl,
+      published_at: publishAt ? new Date(publishAt).toISOString() : new Date().toISOString(),
     }).select().single();
 
     if (insertErr) {
@@ -104,6 +106,7 @@ const TeacherDocs = () => {
     setDocTitle("");
     setDocSubject("");
     setGoogleDocUrl("");
+    setPublishAt("");
     await loadData();
     setAdding(false);
     toast({ title: "Document ajouté !" });
@@ -224,6 +227,18 @@ const TeacherDocs = () => {
                 Le document doit être partagé en mode "Tous ceux qui ont le lien"
               </p>
             </div>
+            <div>
+              <Label htmlFor="publishAt">Publication programmée (optionnel)</Label>
+              <Input
+                id="publishAt"
+                type="datetime-local"
+                value={publishAt}
+                onChange={(e) => setPublishAt(e.target.value)}
+              />
+              <p className="text-xs text-muted-foreground mt-1">
+                Laissez vide pour publier immédiatement
+              </p>
+            </div>
             <Button
               className="w-full"
               disabled={adding}
@@ -336,6 +351,11 @@ const TeacherDocs = () => {
                         <p className="text-xs text-muted-foreground">
                           {doc.folder && <span className="mr-2">{doc.folder}</span>}
                           {new Date(doc.created_at).toLocaleDateString("fr-FR")}
+                          {doc.published_at && new Date(doc.published_at) > new Date() && (
+                            <Badge variant="outline" className="ml-2 text-[10px]">
+                              📅 {new Date(doc.published_at).toLocaleDateString("fr-FR", { day: "numeric", month: "short", hour: "2-digit", minute: "2-digit" })}
+                            </Badge>
+                          )}
                         </p>
                       </div>
                       {!isProcessed && (
