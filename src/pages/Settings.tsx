@@ -322,6 +322,12 @@ const SettingsPage = () => {
                     SMS
                   </a>
                 </Button>
+                <Button variant="secondary" asChild>
+                  <a href={`mailto:?subject=${encodeURIComponent('Rejoins NoteFiche !')}&body=${encodeURIComponent(`🎓 Rejoins-moi sur NoteFiche et on gagne tous les deux du Pro gratuit !\n\n${referralLink}`)}`}>
+                    <Mail className="w-4 h-4 mr-2" />
+                    Email
+                  </a>
+                </Button>
               </div>
               <p className="text-sm text-muted-foreground">
                 <span className="font-medium text-foreground">{referralsCount}</span> parrainage(s) validé(s)

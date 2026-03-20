@@ -79,6 +79,12 @@ const StudentDashboard = () => {
                   SMS
                 </a>
               </Button>
+              <Button size="sm" variant="secondary" asChild>
+                <a href={`mailto:?subject=${encodeURIComponent('Rejoins NoteFiche !')}&body=${encodeURIComponent(`🎓 Rejoins-moi sur NoteFiche et on gagne tous les deux du Pro gratuit !\n\n${referralLink}`)}`}>
+                  <Mail className="w-3.5 h-3.5 mr-1.5" />
+                  Email
+                </a>
+              </Button>
             </div>
             <button
               onClick={dismissReferral}
