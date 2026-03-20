@@ -39,9 +39,9 @@ const App = () => (
               <Route path="/auth" element={<Auth />} />
               <Route path="/reset-password" element={<ResetPassword />} />
               <Route path="/dashboard" element={<Dashboard />} />
-              <Route path="/my-class" element={<JoinClass />} />
+              <Route path="/my-class" element={<Classroom />} />
               <Route path="/brevet-blanc" element={<BrevetBlanc />} />
-              <Route path="/teacher-class" element={<TeacherClass />} />
+              <Route path="/teacher-class" element={<Classroom />} />
               <Route path="/teacher-docs" element={<TeacherDocs />} />
               <Route path="/teacher-students" element={<TeacherStudents />} />
               <Route path="/ai-tutor" element={<AITutor />} />
