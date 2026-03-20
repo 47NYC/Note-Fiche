@@ -62,10 +62,24 @@ const StudentDashboard = () => {
                 {referralsCount > 0 && <> • <span className="font-medium text-foreground">{referralsCount}</span> parrainage(s)</>}
               </p>
             </div>
-            <Button size="sm" variant="secondary" className="shrink-0" onClick={copyLink}>
-              <Copy className="w-3.5 h-3.5 mr-1.5" />
-              Copier le lien
-            </Button>
+            <div className="flex gap-2 shrink-0">
+              <Button size="sm" variant="secondary" onClick={copyLink}>
+                <Copy className="w-3.5 h-3.5 mr-1.5" />
+                Copier
+              </Button>
+              <Button size="sm" variant="secondary" className="bg-green-500/10 hover:bg-green-500/20 text-green-600" asChild>
+                <a href={`https://wa.me/?text=${encodeURIComponent(`🎓 Rejoins-moi sur NoteFiche et on gagne tous les deux du Pro gratuit ! ${referralLink}`)}`} target="_blank" rel="noopener noreferrer">
+                  <MessageCircle className="w-3.5 h-3.5 mr-1.5" />
+                  WhatsApp
+                </a>
+              </Button>
+              <Button size="sm" variant="secondary" asChild>
+                <a href={`sms:?body=${encodeURIComponent(`🎓 Rejoins NoteFiche avec mon lien et on gagne du Pro gratuit ! ${referralLink}`)}`}>
+                  <Share2 className="w-3.5 h-3.5 mr-1.5" />
+                  SMS
+                </a>
+              </Button>
+            </div>
             <button
               onClick={dismissReferral}
               className="absolute top-2 right-2 text-muted-foreground hover:text-foreground text-xs"
