@@ -7,7 +7,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Switch } from "@/components/ui/switch";
-import { Settings, Trash2, AlertTriangle, Save, Camera, User, Sun, Moon, Monitor, Crown, Copy, Link, MessageCircle, Share2 } from "lucide-react";
+import { Settings, Trash2, AlertTriangle, Save, Camera, User, Sun, Moon, Monitor, Crown, Copy, Link, MessageCircle, Share2, Mail } from "lucide-react";
 import { useProAccess } from "@/hooks/useProAccess";
 import { ProBadge } from "@/components/ProGate";
 import { useState, useEffect, useRef } from "react";
@@ -320,6 +320,12 @@ const SettingsPage = () => {
                   <a href={`sms:?body=${encodeURIComponent(`🎓 Rejoins NoteFiche avec mon lien et on gagne du Pro gratuit ! ${referralLink}`)}`}>
                     <Share2 className="w-4 h-4 mr-2" />
                     SMS
+                  </a>
+                </Button>
+                <Button variant="secondary" asChild>
+                  <a href={`mailto:?subject=${encodeURIComponent('Rejoins NoteFiche !')}&body=${encodeURIComponent(`🎓 Rejoins-moi sur NoteFiche et on gagne tous les deux du Pro gratuit !\n\n${referralLink}`)}`}>
+                    <Mail className="w-4 h-4 mr-2" />
+                    Email
                   </a>
                 </Button>
               </div>

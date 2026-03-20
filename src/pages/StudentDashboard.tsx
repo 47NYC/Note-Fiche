@@ -9,7 +9,7 @@ import { useStudentStats } from "@/hooks/useStudentStats";
 import { useWeeklyActivity } from "@/hooks/useWeeklyActivity";
 import { useRecentQuizzes } from "@/hooks/useRecentQuizzes";
 import { useProAccess } from "@/hooks/useProAccess";
-import { Crown, ArrowRight, Gift, Copy, MessageCircle, Share2 } from "lucide-react";
+import { Crown, ArrowRight, Gift, Copy, MessageCircle, Share2, Mail } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
@@ -77,6 +77,12 @@ const StudentDashboard = () => {
                 <a href={`sms:?body=${encodeURIComponent(`🎓 Rejoins NoteFiche avec mon lien et on gagne du Pro gratuit ! ${referralLink}`)}`}>
                   <Share2 className="w-3.5 h-3.5 mr-1.5" />
                   SMS
+                </a>
+              </Button>
+              <Button size="sm" variant="secondary" asChild>
+                <a href={`mailto:?subject=${encodeURIComponent('Rejoins NoteFiche !')}&body=${encodeURIComponent(`🎓 Rejoins-moi sur NoteFiche et on gagne tous les deux du Pro gratuit !\n\n${referralLink}`)}`}>
+                  <Mail className="w-3.5 h-3.5 mr-1.5" />
+                  Email
                 </a>
               </Button>
             </div>
