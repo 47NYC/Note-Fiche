@@ -21,6 +21,7 @@ import Learn from "./pages/Learn";
 import Flashcards from "./pages/Flashcards";
 import Leaderboard from "./pages/Leaderboard";
 import Pro from "./pages/Pro";
+import Classroom from "./pages/Classroom";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
