@@ -7,7 +7,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Switch } from "@/components/ui/switch";
-import { Settings, Trash2, AlertTriangle, Save, Camera, User, Sun, Moon, Monitor, Crown, Copy, Link } from "lucide-react";
+import { Settings, Trash2, AlertTriangle, Save, Camera, User, Sun, Moon, Monitor, Crown, Copy, Link, MessageCircle, Share2 } from "lucide-react";
 import { useProAccess } from "@/hooks/useProAccess";
 import { ProBadge } from "@/components/ProGate";
 import { useState, useEffect, useRef } from "react";
@@ -293,7 +293,7 @@ const SettingsPage = () => {
             </CardHeader>
             <CardContent className="space-y-3">
               <div className="flex gap-2">
-                <Input readOnly value={referralLink} className="font-mono text-xs" />
+                <Input readOnly value={referralLink} className="font-mono text-xs flex-1" />
                 <Button
                   variant="secondary"
                   onClick={async () => {
@@ -307,6 +307,20 @@ const SettingsPage = () => {
                 >
                   <Copy className="w-4 h-4 mr-2" />
                   Copier
+                </Button>
+              </div>
+              <div className="flex gap-2">
+                <Button variant="secondary" className="bg-green-500/10 hover:bg-green-500/20 text-green-600" asChild>
+                  <a href={`https://wa.me/?text=${encodeURIComponent(`🎓 Rejoins-moi sur NoteFiche et on gagne tous les deux du Pro gratuit ! ${referralLink}`)}`} target="_blank" rel="noopener noreferrer">
+                    <MessageCircle className="w-4 h-4 mr-2" />
+                    WhatsApp
+                  </a>
+                </Button>
+                <Button variant="secondary" asChild>
+                  <a href={`sms:?body=${encodeURIComponent(`🎓 Rejoins NoteFiche avec mon lien et on gagne du Pro gratuit ! ${referralLink}`)}`}>
+                    <Share2 className="w-4 h-4 mr-2" />
+                    SMS
+                  </a>
                 </Button>
               </div>
               <p className="text-sm text-muted-foreground">
