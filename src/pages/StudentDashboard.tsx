@@ -9,7 +9,7 @@ import { useStudentStats } from "@/hooks/useStudentStats";
 import { useWeeklyActivity } from "@/hooks/useWeeklyActivity";
 import { useRecentQuizzes } from "@/hooks/useRecentQuizzes";
 import { useProAccess } from "@/hooks/useProAccess";
-import { Crown, ArrowRight, Gift, Copy, MessageCircle, Share2 } from "lucide-react";
+import { Crown, ArrowRight, Gift, Copy, MessageCircle, Share2, Mail } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
